@@ -1,5 +1,5 @@
 {
-  "name": "buyolgy-common1",
+  "name": "buyolgy-common",
   "version": "1.0.0",
   "description": "common package for e-comerce",
   "main": "lib/index.js",
