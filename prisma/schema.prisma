@@ -1,0 +1,237 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  productId   Int         @id @default(autoincrement())
+  name        String
+  description String
+  listPrice   Int
+  salePrice   Int
+  categoryId  Int?
+  qty         Int
+  tag         String
+  sku         Int
+  isDeleted   Boolean     @default(false)
+  meta        meta[]
+  category    Category?   @relation(fields: [categoryId], references: [categoryId])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?   @updatedAt
+  cartItems   CartItem[]
+  OrderItem   OrderItem[]
+}
+
+model meta {
+  metaId     Int       @id @default(autoincrement())
+  productId  Int?
+  imageUrl   String
+  isDeleted  Boolean   @default(false)
+  product    Product?  @relation(fields: [productId], references: [productId])
+  categoryId Int?
+  catogory   Category? @relation(fields: [categoryId], references: [categoryId])
+  couponId   Int?
+  coupon     Coupon?   @relation(fields: [couponId], references: [couponId])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+model Address {
+  addressId Int            @id @default(autoincrement())
+  address   String
+  city      String
+  district  String
+  state     String
+  country   String
+  pinCode   String
+  userId    Int?
+  user      User?          @relation(fields: [userId], references: [userId])
+  addresses OrderAddress[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime?      @updatedAt
+}
+
+model Category {
+  categoryId    Int           @id @default(autoincrement())
+  name          String
+  isDeleted     Boolean       @default(false)
+  subCategories SubCategory[]
+  products      Product[]
+  meta          meta[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
+}
+
+model SubCategory {
+  subCategoryId Int       @id @default(autoincrement())
+  name          String
+  isDeleted     Boolean   @default(false)
+  categoryId    Int
+  category      Category  @relation(fields: [categoryId], references: [categoryId])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+}
+
+model User {
+  userId      Int          @id @default(autoincrement())
+  firstName   String
+  lastName    String?      @default("")
+  email       String       @unique
+  password    String?      @default("")
+  phone       String       @unique
+  userLogings UserLogin[]
+  cart        Cart[]
+  couponUsers CouponUser[]
+  orders      Order[]
+  addresses   Address[]
+  token       String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
+}
+
+model LoginLogs {
+  LoginLogId Int       @id @default(autoincrement())
+  phone      String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+model UserLogin {
+  userLoginId Int       @id @default(autoincrement())
+  logout      Boolean   @default(false)
+  fcm         String?
+  deviceId    String?
+  userId      Int
+  user        User      @relation(fields: [userId], references: [userId])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+model Cart {
+  cartId    Int        @id @default(autoincrement())
+  userId    Int?
+  user      User?      @relation(fields: [userId], references: [userId])
+  cartItems CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
+}
+
+model CartItem {
+  cartId    Int
+  productId Int
+  quantity  Int
+  cart      Cart      @relation(fields: [cartId], references: [cartId])
+  product   Product   @relation(fields: [productId], references: [productId])
+  couponId  Int?
+  coupon    Coupon?   @relation(fields: [couponId], references: [couponId])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([cartId, productId])
+}
+
+model Discount {
+  discountId         Int       @id @default(autoincrement())
+  discountName       String
+  discountPercentage Decimal
+  coupons            Coupon[]
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime? @updatedAt
+}
+
+model Coupon {
+  couponId      Int          @id @default(autoincrement())
+  couponName    String
+  couponCode    String       @unique
+  discountId    Int?
+  discount      Discount?    @relation(fields: [discountId], references: [discountId])
+  coupons       CartItem[]
+  couponUsers   CouponUser[]
+  startAt       DateTime
+  endAt         DateTime
+  numberOfUsers Int
+  active        Boolean
+  score         Int
+  meta          meta[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?    @updatedAt
+}
+
+model CouponUser {
+  couponId  Int
+  coupons   Coupon    @relation(fields: [couponId], references: [couponId])
+  userId    Int
+  user      User      @relation(fields: [userId], references: [userId])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([userId, couponId])
+}
+
+enum OrderStaus {
+  PENDING
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentMethods {
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH_ON_DELIVERY
+  UPI
+}
+
+enum OrderType {
+  DELIVERY
+  PICKUP
+  DINE_IN
+  DRIVE_THRU
+}
+
+model Order {
+  orderId       Int            @id() @default(autoincrement())
+  userId        Int
+  user          User           @relation(fields: [userId], references: [userId])
+  status        OrderStaus
+  paymentMethod PaymentMethods
+  orderType     OrderType
+  totalCost     Decimal
+  totalItem     Int             @default(0)
+  OrderItem     OrderItem[]
+  addresses     OrderAddress[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
+}
+
+model OrderAddress {
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [orderId])
+  addressId Int
+  address   Address @relation(fields: [addressId], references: [addressId])
+
+  @@id([orderId, addressId])
+}
+
+model OrderItem {
+  orderId   Int
+  productId Int
+  quantity  Int
+  unitPrice Decimal
+  total     Decimal
+  order     Order     @relation(fields: [orderId], references: [orderId])
+  product   Product   @relation(fields: [productId], references: [productId])
+  discount  Decimal
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([orderId, productId])
+}
