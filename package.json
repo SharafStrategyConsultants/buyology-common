@@ -1,5 +1,5 @@
 {
-  "name": "rfc-common",
+  "name": "buyolgy-common",
   "version": "1.0.0",
   "description": "common package for e-comerce",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ridhav30/rfc-common.git"
+    "url": "git+https://github.com/SharafStrategyConsultants/buyology-common.git"
   },
   "keywords": [
     "common-package",
