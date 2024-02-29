@@ -11,22 +11,24 @@ datasource db {
 }
 
 model Product {
-  productId   Int         @id @default(autoincrement())
-  name        String
-  description String
-  listPrice   Int
-  salePrice   Int
-  categoryId  Int?
-  qty         Int
-  tag         String
-  sku         Int
-  isDeleted   Boolean     @default(false)
-  meta        meta[]
-  category    Category?   @relation(fields: [categoryId], references: [categoryId])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?   @updatedAt
-  cartItems   CartItem[]
-  OrderItem   OrderItem[]
+  productId          Int         @id @default(autoincrement())
+  name               String
+  description        String
+  purchasePrice      Int
+  salePrice          Int
+  categoryId         Int?
+  qty                Int
+  tag                String
+  sku                Int
+  discount           Discount?   @relation(fields: [discountDiscountId], references: [discountId])
+  isDeleted          Boolean     @default(false)
+  meta               meta[]
+  category           Category?   @relation(fields: [categoryId], references: [categoryId])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime?   @updatedAt
+  cartItems          CartItem[]
+  OrderItem          OrderItem[]
+  discountDiscountId Int?
 }
 
 model meta {
@@ -140,8 +142,10 @@ model CartItem {
 model Discount {
   discountId         Int       @id @default(autoincrement())
   discountName       String
-  discountPercentage Decimal
+  discountPercentage Decimal?
+  discountAmount     Decimal?
   coupons            Coupon[]
+  products           Product[]
   createdAt          DateTime  @default(now())
   updatedAt          DateTime? @updatedAt
 }
@@ -205,7 +209,7 @@ model Order {
   paymentMethod PaymentMethods
   orderType     OrderType
   totalCost     Decimal
-  totalItem     Int             @default(0)
+  totalItem     Int            @default(0)
   OrderItem     OrderItem[]
   addresses     OrderAddress[]
   createdAt     DateTime       @default(now())
