@@ -11,24 +11,73 @@ datasource db {
 }
 
 model Product {
-  productId          Int         @id @default(autoincrement())
-  name               String
-  description        String
-  purchasePrice      Int
-  salePrice          Int
-  categoryId         Int?
-  qty                Int
-  tag                String
-  sku                Int
-  discount           Discount?   @relation(fields: [discountDiscountId], references: [discountId])
-  isDeleted          Boolean     @default(false)
-  meta               meta[]
-  category           Category?   @relation(fields: [categoryId], references: [categoryId])
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime?   @updatedAt
-  cartItems          CartItem[]
-  OrderItem          OrderItem[]
-  discountDiscountId Int?
+  productId            Int                    @id @default(autoincrement())
+  name                 String
+  description          String
+  purchasePrice        Int
+  salePrice            Int
+  categoryId           Int?
+  qty                  Int
+  tag                  String
+  sku                  Int
+  discount             Discount?              @relation(fields: [discountDiscountId], references: [discountId])
+  isDeleted            Boolean                @default(false)
+  meta                 meta[]
+  category             Category?              @relation(fields: [categoryId], references: [categoryId])
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime?              @updatedAt
+  cartItems            CartItem[]
+  OrderItem            OrderItem[]
+  discountDiscountId   Int?
+  productSpecification ProductSpecification[]
+}
+
+model Specification {
+  specificationId      Int                     @id @default(autoincrement())
+  name                 String
+  categorySpecs        CategorySpecification[]
+  productSpecification ProductSpecification[]
+}
+
+model CategorySpecification {
+  categoryId      Int
+  specificationId Int
+  category        Category      @relation(fields: [categoryId], references: [categoryId])
+  specification   Specification @relation(fields: [specificationId], references: [specificationId])
+
+  @@id([categoryId, specificationId])
+}
+
+model ProductSpecification {
+  productId       Int
+  specificationId Int
+  value           String // Can be changed to more specific types or JSON for complex values
+  product         Product       @relation(fields: [productId], references: [productId])
+  specification   Specification @relation(fields: [specificationId], references: [specificationId])
+
+  @@id([productId, specificationId])
+}
+
+model Category {
+  categoryId            Int                     @id @default(autoincrement())
+  name                  String
+  isDeleted             Boolean                 @default(false)
+  subCategories         SubCategory[]
+  products              Product[]
+  meta                  meta[]
+  categorySpecification CategorySpecification[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime?               @updatedAt
+}
+
+model SubCategory {
+  subCategoryId Int       @id @default(autoincrement())
+  name          String
+  isDeleted     Boolean   @default(false)
+  categoryId    Int
+  category      Category  @relation(fields: [categoryId], references: [categoryId])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
 }
 
 model meta {
@@ -58,27 +107,6 @@ model Address {
   addresses OrderAddress[]
   createdAt DateTime       @default(now())
   updatedAt DateTime?      @updatedAt
-}
-
-model Category {
-  categoryId    Int           @id @default(autoincrement())
-  name          String
-  isDeleted     Boolean       @default(false)
-  subCategories SubCategory[]
-  products      Product[]
-  meta          meta[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?     @updatedAt
-}
-
-model SubCategory {
-  subCategoryId Int       @id @default(autoincrement())
-  name          String
-  isDeleted     Boolean   @default(false)
-  categoryId    Int
-  category      Category  @relation(fields: [categoryId], references: [categoryId])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
 }
 
 model User {
@@ -140,14 +168,20 @@ model CartItem {
 }
 
 model Discount {
-  discountId         Int       @id @default(autoincrement())
+  discountId         Int          @id @default(autoincrement())
   discountName       String
   discountPercentage Decimal?
   discountAmount     Decimal?
+  discountType       DiscountType
   coupons            Coupon[]
   products           Product[]
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime? @updatedAt
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime?    @updatedAt
+}
+
+enum DiscountType {
+  PERCENTAGE
+  AMOUNT
 }
 
 model Coupon {
