@@ -16,6 +16,7 @@ model Product {
   description          String
   purchasePrice        Int
   salePrice            Int
+  listPrice            Int
   categoryId           Int?
   qty                  Int
   tag                  String
