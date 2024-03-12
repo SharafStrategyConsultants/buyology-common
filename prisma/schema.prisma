@@ -35,7 +35,10 @@ model Product {
 
 model Specification {
   specificationId      Int                     @id @default(autoincrement())
+  label                String
+  type                 String
   name                 String
+  placeholder          String?
   categorySpecs        CategorySpecification[]
   productSpecification ProductSpecification[]
 }
@@ -43,10 +46,6 @@ model Specification {
 model CategorySpecification {
   categoryId      Int
   specificationId Int
-  label           String
-  type            String
-  name            String
-  placeholder     String?
   category        Category      @relation(fields: [categoryId], references: [categoryId])
   specification   Specification @relation(fields: [specificationId], references: [specificationId])
 
@@ -56,10 +55,6 @@ model CategorySpecification {
 model ProductSpecification {
   productId       Int
   specificationId Int
-  label           String
-  type            String
-  name            String
-  placeholder     String?
   product         Product       @relation(fields: [productId], references: [productId])
   specification   Specification @relation(fields: [specificationId], references: [specificationId])
 
