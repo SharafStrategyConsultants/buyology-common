@@ -11,68 +11,54 @@ datasource db {
 }
 
 model Product {
-  productId            Int                    @id @default(autoincrement())
-  name                 String
-  description          String
-  purchasePrice        Int
-  salePrice            Int
-  listPrice            Int
-  categoryId           Int?
-  qty                  Int
-  tag                  String
-  sku                  Int
-  discount             Discount?              @relation(fields: [discountDiscountId], references: [discountId])
-  isDeleted            Boolean                @default(false)
-  meta                 meta[]
-  category             Category?              @relation(fields: [categoryId], references: [categoryId])
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime?              @updatedAt
-  cartItems            CartItem[]
-  OrderItem            OrderItem[]
-  discountDiscountId   Int?
-  productSpecification ProductSpecification[]
+  productId          Int              @id @default(autoincrement())
+  name               String
+  description        String
+  purchasePrice      Int
+  salePrice          Int
+  listPrice          Int
+  categoryId         Int?
+  qty                Int
+  tag                String
+  sku                Int
+  discount           Discount?        @relation(fields: [discountDiscountId], references: [discountId])
+  isDeleted          Boolean          @default(false)
+  meta               meta[]
+  category           Category?        @relation(fields: [categoryId], references: [categoryId])
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime?        @updatedAt
+  cartItems          CartItem[]
+  OrderItem          OrderItem[]
+  productVariants    ProductVariant[]
+  specification      Json?
+  discountDiscountId Int?
 }
 
-model Specification {
-  specificationId      Int                     @id @default(autoincrement())
-  label                String
-  type                 String
-  name                 String
-  placeholder          String?
-  categorySpecs        CategorySpecification[]
-  productSpecification ProductSpecification[]
-}
-
-model CategorySpecification {
-  categoryId      Int
-  specificationId Int
-  value           String
-  category        Category      @relation(fields: [categoryId], references: [categoryId])
-  specification   Specification @relation(fields: [specificationId], references: [specificationId])
-
-  @@id([categoryId, specificationId])
-}
-
-model ProductSpecification {
-  productId       Int
-  specificationId Int
-  value           String
-  product         Product       @relation(fields: [productId], references: [productId])
-  specification   Specification @relation(fields: [specificationId], references: [specificationId])
-
-  @@id([productId, specificationId])
+model ProductVariant {
+  variantId    Int       @id @default(autoincrement())
+  productId    Int
+  color        String?
+  storage      String?
+  ram          String?
+  processor    String?
+  stock        Int
+  primaryImage String
+  isDeleted    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+  product      Product   @relation(fields: [productId], references: [productId])
 }
 
 model Category {
-  categoryId            Int                     @id @default(autoincrement())
-  name                  String
-  isDeleted             Boolean                 @default(false)
-  subCategories         SubCategory[]
-  products              Product[]
-  meta                  meta[]
-  categorySpecification CategorySpecification[]
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime?               @updatedAt
+  categoryId    Int           @id @default(autoincrement())
+  name          String
+  isDeleted     Boolean       @default(false)
+  subCategories SubCategory[]
+  products      Product[]
+  meta          meta[]
+  specification Json[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
 }
 
 model SubCategory {
