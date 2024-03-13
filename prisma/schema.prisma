@@ -17,7 +17,6 @@ model Product {
   salePrice          Int
   listPrice          Int
   categoryId         Int?
-  qty                Int
   tag                String
   sku                Int
   discount           Discount?        @relation(fields: [discountDiscountId], references: [discountId])
