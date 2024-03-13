@@ -14,7 +14,6 @@ model Product {
   productId          Int              @id @default(autoincrement())
   name               String
   description        String
-  purchasePrice      Int
   salePrice          Int
   listPrice          Int
   categoryId         Int?
@@ -42,7 +41,6 @@ model ProductVariant {
   ram          String?
   processor    String?
   stock        Int
-  primaryImage String
   isDeleted    Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
