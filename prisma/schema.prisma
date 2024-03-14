@@ -31,19 +31,22 @@ model Product {
 }
 
 model ProductVariant {
-  variantId Int       @id @default(autoincrement())
-  productId Int
-  color     String?
-  storage   String?
-  ram       String?
-  processor String?
-  salePrice Int
-  listPrice Int
-  quantity  Int
-  isDeleted Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  product   Product   @relation(fields: [productId], references: [productId])
+  variantId       Int       @id @default(autoincrement())
+  productId       Int
+  graphics        String?
+  color           String?
+  hdd             String?
+  ssd             String?
+  ram             String?
+  processor       String?
+  internelStorage String?
+  salePrice       Int
+  listPrice       Int
+  quantity        Int
+  isDeleted       Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
+  product         Product   @relation(fields: [productId], references: [productId])
 }
 
 model Category {
