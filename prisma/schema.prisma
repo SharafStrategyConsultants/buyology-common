@@ -54,6 +54,7 @@ model Category {
   products      Product[]
   meta          meta[]
   specification Json[]
+  variantInputs Json[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
 }
