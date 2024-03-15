@@ -26,23 +26,17 @@ model Product {
   cartItems          CartItem[]
   OrderItem          OrderItem[]
   productVariants    ProductVariant[]
-  specification      Json?
+  specification      Json[]
   discountDiscountId Int?
 }
 
 model ProductVariant {
   variantId       Int       @id @default(autoincrement())
   productId       Int
-  graphics        String?
-  color           String?
-  hdd             String?
-  ssd             String?
-  ram             String?
-  processor       String?
-  internelStorage String?
   salePrice       Int
   listPrice       Int
   quantity        Int
+  specifications  Json[]
   isDeleted       Boolean   @default(false)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime? @updatedAt
@@ -56,8 +50,6 @@ model Category {
   subCategories SubCategory[]
   products      Product[]
   meta          meta[]
-  specification Json[]
-  variantInputs Json[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
 }
