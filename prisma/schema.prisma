@@ -48,7 +48,7 @@ model Category {
   name          String
   isDeleted     Boolean    @default(false)
   parentId      Int?
-  parentChild   Category?  @relation("subCategories", fields: [parentId], references: [categoryId])
+  parent        Category?  @relation("subCategories", fields: [parentId], references: [categoryId])
   subCategories Category[] @relation("subCategories")
   products      Product[]
   meta          meta[]
