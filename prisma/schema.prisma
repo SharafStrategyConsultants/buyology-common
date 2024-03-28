@@ -26,32 +26,35 @@ model Product {
   cartItems          CartItem[]
   OrderItem          OrderItem[]
   productVariants    ProductVariant[]
-  specifications      Json[]
+  specifications     Json[]
   discountDiscountId Int?
 }
 
 model ProductVariant {
-  variantId       Int       @id @default(autoincrement())
-  productId       Int
-  salePrice       Int
-  listPrice       Int
-  quantity        Int
-  specifications  Json[]
-  isDeleted       Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime? @updatedAt
-  product         Product   @relation(fields: [productId], references: [productId])
+  variantId      Int       @id @default(autoincrement())
+  productId      Int
+  salePrice      Int
+  listPrice      Int
+  quantity       Int
+  specifications Json[]
+  isDeleted      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+  product        Product   @relation(fields: [productId], references: [productId])
 }
 
 model Category {
-  categoryId    Int           @id @default(autoincrement())
-  name          String
-  isDeleted     Boolean       @default(false)
-  subCategories SubCategory[]
-  products      Product[]
-  meta          meta[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?     @updatedAt
+  categoryId          Int           @id @default(autoincrement())
+  name                String
+  isDeleted           Boolean       @default(false)
+  parentId            Int?
+  parentChildRelation Category?     @relation("subCategories", fields: [parentId], references: [categoryId])
+  categories          Category[]    @relation("subCategories")
+  subCategories       SubCategory[]
+  products            Product[]
+  meta                meta[]
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime?     @updatedAt
 }
 
 model SubCategory {
