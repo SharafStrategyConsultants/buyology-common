@@ -70,9 +70,9 @@ model meta {
   productId  Int?
   imageUrl   String
   isDeleted  Boolean   @default(false)
-  product    Product?  @relation(fields: [productId], references: [productId])
+  product    Product?  @relation(fields: [productId], references: [productId],onDelete: Cascade)
   categoryId Int?
-  catogory   Category? @relation(fields: [categoryId], references: [categoryId])
+  catogory   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
   couponId   Int?
   coupon     Coupon?   @relation(fields: [couponId], references: [couponId])
   createdAt  DateTime  @default(now())
