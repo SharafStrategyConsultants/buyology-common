@@ -11,23 +11,21 @@ datasource db {
 }
 
 model Product {
-  productId          Int              @id @default(autoincrement())
-  name               String
-  description        String
-  categoryId         Int?
-  tag                String
-  sku                Int
-  discount           Discount?        @relation(fields: [discountDiscountId], references: [discountId])
-  isDeleted          Boolean          @default(false)
-  meta               meta[]
-  category           Category?        @relation(fields: [categoryId], references: [categoryId])
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime?        @updatedAt
-  cartItems          CartItem[]
-  OrderItem          OrderItem[]
-  productVariants    ProductVariant[]
-  specifications     Json[]
-  discountDiscountId Int?
+  productId       Int              @id @default(autoincrement())
+  name            String
+  description     String
+  categoryId      Int?
+  tag             String
+  sku             Int
+  isDeleted       Boolean          @default(false)
+  meta            meta[]
+  category        Category?        @relation(fields: [categoryId], references: [categoryId])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime?        @updatedAt
+  cartItems       CartItem[]
+  OrderItem       OrderItem[]
+  productVariants ProductVariant[]
+  specifications  Json[]
 }
 
 model ProductVariant {
@@ -36,6 +34,8 @@ model ProductVariant {
   salePrice      Int
   listPrice      Int
   quantity       Int
+  discountId     Int?
+  discount       Discount?  @relation(fields: [discountId], references: [discountId])
   specifications Json[]
   isDeleted      Boolean    @default(false)
   createdAt      DateTime   @default(now())
@@ -156,15 +156,15 @@ model CartItem {
 }
 
 model Discount {
-  discountId         Int          @id @default(autoincrement())
+  discountId         Int              @id @default(autoincrement())
   discountName       String
   discountPercentage Decimal?
   discountAmount     Decimal?
   discountType       DiscountType
   coupons            Coupon[]
-  products           Product[]
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime?    @updatedAt
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime?        @updatedAt
+  ProductVariant     ProductVariant[]
 }
 
 enum DiscountType {
