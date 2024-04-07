@@ -76,6 +76,8 @@ model meta {
   catogory   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
   couponId   Int?
   coupon     Coupon?   @relation(fields: [couponId], references: [couponId])
+  discountId Int?
+  discount   Discount? @relation(fields: [discountId], references: [discountId])
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
 }
@@ -165,6 +167,7 @@ model Discount {
   createdAt          DateTime         @default(now())
   updatedAt          DateTime?        @updatedAt
   ProductVariant     ProductVariant[]
+  meta               meta[]
 }
 
 enum DiscountType {
