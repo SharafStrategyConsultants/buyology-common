@@ -234,8 +234,10 @@ model Order {
   OrderItem          OrderItem[]
   addresses          OrderAddress[]
   shippingCharge     Decimal?
+  expectedDelivery   DateTime?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime?      @updatedAt
+  Payment            Payment[]
 }
 
 model OrderAddress {
@@ -264,4 +266,21 @@ model OrderItem {
   updatedAt     DateTime?     @updatedAt
 
   @@id([orderId, productId, variantId])
+}
+
+model Payment {
+  paymentId     Int            @id() @default(autoincrement())
+  orderId       Int
+  order         Order          @relation(fields: [orderId], references: [orderId])
+  paymentMethod PaymentMethods
+  transactionId String?
+  amount        Decimal
+  status        PaymentStatus
+  createdAt     DateTime       @default(now())
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+  FAILED
 }
