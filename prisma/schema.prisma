@@ -209,7 +209,6 @@ model CouponUser {
 
 enum OrderStaus {
   PENDING
-  PREPARING
   SHIPPED
   DELIVERED
   CANCELED
@@ -222,20 +221,12 @@ enum PaymentMethods {
   UPI
 }
 
-enum OrderType {
-  DELIVERY
-  PICKUP
-  DINE_IN
-  DRIVE_THRU
-}
-
 model Order {
   orderId          Int            @id() @default(autoincrement())
   userId           Int
   user             User           @relation(fields: [userId], references: [userId])
   status           OrderStaus
   paymentMethod    PaymentMethods
-  orderType        OrderType
   totalDiscountSum Decimal        @default(0)
   totalCost        Decimal
   totalItem        Int            @default(0)
