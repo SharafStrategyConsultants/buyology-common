@@ -226,7 +226,6 @@ model Order {
   userId             Int
   user               User           @relation(fields: [userId], references: [userId])
   status             OrderStaus
-  paymentMethod      PaymentMethods
   totalDiscountSum   Decimal        @default(0)
   totalCost          Decimal
   totalSumWithCharge Decimal?
