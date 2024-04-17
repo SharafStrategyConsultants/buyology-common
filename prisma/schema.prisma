@@ -234,7 +234,7 @@ model Order {
   OrderItem          OrderItem[]
   addresses          OrderAddress[]
   shippingCharge     Decimal?
-  expectedDelivery   DateTime
+  expectedDelivery   DateTime?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime?      @updatedAt
   Payment            Payment[]
