@@ -27,6 +27,8 @@ model Product {
   OrderItem       OrderItem[]
   productVariants ProductVariant[]
   specifications  Json[]
+  Advertisement   Advertisement?   @relation(fields: [advertisementId], references: [advertisementId])
+  advertisementId Int?
 }
 
 model ProductVariant {
@@ -283,4 +285,14 @@ enum PaymentStatus {
   PAID
   UNPAID
   FAILED
+}
+
+model Advertisement {
+  advertisementId Int       @id @default(autoincrement())
+  products        Product[]
+  imageURL        String
+  description     String
+  type            String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
 }
