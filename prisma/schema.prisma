@@ -33,13 +33,13 @@ model Product {
 }
 
 model Specification {
-  id          Int     @id @default(autoincrement())
-  name        String
-  value       String
-  description String
-  imageUrl    String
-  product     Product @relation(fields: [productId], references: [productId])
-  productId   Int
+  id                Int     @id @default(autoincrement())
+  specificationName String
+  specification     String
+  description       String
+  imageUrl          String
+  product           Product @relation(fields: [productId], references: [productId])
+  productId         Int
 }
 
 model ProductVariant {
@@ -59,13 +59,13 @@ model ProductVariant {
 }
 
 model VariantSpecification {
-  id             Int            @id @default(autoincrement())
-  name           String
-  value          String
-  description    String
-  imageUrl       String
-  productVariant ProductVariant @relation(fields: [variantId], references: [variantId])
-  variantId      Int
+  id                Int            @id @default(autoincrement())
+  specificationName String
+  specification     String
+  description       String
+  imageUrl          String
+  productVariant    ProductVariant @relation(fields: [variantId], references: [variantId])
+  variantId         Int
 }
 
 model Category {
