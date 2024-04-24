@@ -38,7 +38,7 @@ model Specification {
   specification     String
   description       String
   imageUrl          String
-  product           Product @relation(fields: [productId], references: [productId])
+  product           Product @relation(fields: [productId], references: [productId], onDelete: Cascade)
   productId         Int
 }
 
@@ -54,7 +54,7 @@ model ProductVariant {
   isDeleted      Boolean                @default(false)
   createdAt      DateTime               @default(now())
   updatedAt      DateTime?              @updatedAt
-  product        Product                @relation(fields: [productId], references: [productId])
+  product        Product                @relation(fields: [productId], references: [productId], onDelete: Cascade)
   CartItem       CartItem[]
 }
 
@@ -64,7 +64,7 @@ model VariantSpecification {
   specification     String
   description       String
   imageUrl          String
-  productVariant    ProductVariant @relation(fields: [variantId], references: [variantId])
+  productVariant    ProductVariant @relation(fields: [variantId], references: [variantId], onDelete: Cascade)
   variantId         Int
 }
 
