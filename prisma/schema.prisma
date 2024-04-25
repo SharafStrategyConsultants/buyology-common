@@ -22,6 +22,7 @@ model Product {
   meta            meta[]
   category        Category?        @relation(fields: [categoryId], references: [categoryId])
   isPublished     Boolean          @default(false)
+  productType     ProductType      @default(REFURBISHED)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime?        @updatedAt
   cartItems       CartItem[]
@@ -30,6 +31,12 @@ model Product {
   specifications  Specification[]
   Advertisement   Advertisement?   @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId Int?
+}
+
+enum ProductType {
+  REFURBISHED
+  BRAND_NEW
+  DITHARI_CERTIFIED
 }
 
 model Specification {
