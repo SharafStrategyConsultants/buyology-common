@@ -17,7 +17,7 @@ model Product {
   description     String
   categoryId      Int?
   tag             String
-  sku             Int              @default(autoincrement())
+  sku             Int              @unique @default(autoincrement())
   isDeleted       Boolean          @default(false)
   meta            meta[]
   category        Category?        @relation(fields: [categoryId], references: [categoryId])
