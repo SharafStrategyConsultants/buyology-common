@@ -17,6 +17,7 @@ model Product {
   description     String
   categoryId      Int?
   tag             String
+  modelNumber     String?
   sku             Int              @unique @default(autoincrement())
   isDeleted       Boolean          @default(false)
   meta            meta[]
