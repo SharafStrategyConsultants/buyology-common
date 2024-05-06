@@ -18,7 +18,8 @@ model Product {
   categoryId      Int?
   tag             String
   modelNumber     String?
-  sku             Int              @unique @default(autoincrement())
+  sku             String?
+  warrenty        String?
   isDeleted       Boolean          @default(false)
   meta            meta[]
   category        Category?        @relation(fields: [categoryId], references: [categoryId])
@@ -62,8 +63,9 @@ model Specification {
 model ProductVariant {
   variantId      Int                    @id @default(autoincrement())
   productId      Int
-  salePrice      Int
-  listPrice      Int
+  cost           Decimal                @default(0)
+  salePrice      Decimal                @default(0)
+  listPrice      Decimal                @default(0)
   quantity       Int
   discountId     Int?
   discount       Discount?              @relation(fields: [discountId], references: [discountId])
