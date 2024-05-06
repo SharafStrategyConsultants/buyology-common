@@ -19,7 +19,7 @@ model Product {
   tag             String
   modelNumber     String?
   sku             String?
-  warrenty        String?
+  warranty        String?
   isDeleted       Boolean          @default(false)
   meta            meta[]
   category        Category?        @relation(fields: [categoryId], references: [categoryId])
