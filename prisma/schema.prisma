@@ -35,6 +35,30 @@ model Product {
   Advertisement   Advertisement?   @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId Int?
   descriptions    Json[]
+  WishlistItem    WishlistItem[]
+}
+
+model Wishlist {
+  wishlistId Int            @id @default(autoincrement())
+  userId     Int
+  user       User           @relation(fields: [userId], references: [userId])
+  items      WishlistItem[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime?      @updatedAt
+
+  @@unique([userId])
+}
+
+model WishlistItem {
+  wishlistItemId Int       @id @default(autoincrement())
+  wishlistId     Int
+  wishlist       Wishlist  @relation(fields: [wishlistId], references: [wishlistId])
+  productId      Int
+  product        Product   @relation(fields: [productId], references: [productId])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  @@unique([wishlistId, productId])
 }
 
 model Attributes {
@@ -159,6 +183,7 @@ model User {
   token       String       @unique
   createdAt   DateTime     @default(now())
   updatedAt   DateTime?    @updatedAt
+  Wishlist    Wishlist?
 }
 
 model LoginLogs {
