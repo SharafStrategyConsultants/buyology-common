@@ -50,15 +50,17 @@ model Wishlist {
 }
 
 model WishlistItem {
-  wishlistItemId Int       @id @default(autoincrement())
+  wishlistItemId Int            @id @default(autoincrement())
   wishlistId     Int
-  wishlist       Wishlist  @relation(fields: [wishlistId], references: [wishlistId])
+  wishlist       Wishlist       @relation(fields: [wishlistId], references: [wishlistId])
   productId      Int
-  product        Product   @relation(fields: [productId], references: [productId])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @updatedAt
+  product        Product        @relation(fields: [productId], references: [productId])
+  variantId      Int
+  variant        ProductVariant @relation(fields: [variantId], references: [variantId])
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime?      @updatedAt
 
-  @@unique([wishlistId, productId])
+  @@unique([wishlistId, productId, variantId])
 }
 
 model Attributes {
@@ -102,6 +104,7 @@ model ProductVariant {
   CartItem       CartItem[]
   descriptions   Json[]
   highlights     Json[]
+  WishlistItem   WishlistItem[]
 }
 
 model VariantSpecification {
