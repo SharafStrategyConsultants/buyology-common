@@ -12,30 +12,44 @@ datasource db {
 }
 
 model Product {
-  productId       Int              @id @default(autoincrement())
+  productId       Int             @id @default(autoincrement())
   name            String
   description     String
   categoryId      Int?
   tag             String
   modelNumber     String?
-  sku             String?
+  sku             String
   warranty        String?
-  isDeleted       Boolean          @default(false)
+  isDeleted       Boolean         @default(false)
   meta            meta[]
-  category        Category?        @relation(fields: [categoryId], references: [categoryId])
-  isPublished     Boolean          @default(false)
-  productType     ProductType      @default(REFURBISHED)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime?        @updatedAt
+  category        Category?       @relation(fields: [categoryId], references: [categoryId])
+  isPublished     Boolean         @default(false)
+  productType     ProductType     @default(REFURBISHED)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime?       @updatedAt
   cartItems       CartItem[]
   OrderItem       OrderItem[]
-  productVariants ProductVariant[]
   specifications  Specification[]
   attributes      Attributes[]
-  Advertisement   Advertisement?   @relation(fields: [advertisementId], references: [advertisementId])
+  Advertisement   Advertisement?  @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId Int?
   descriptions    Json[]
-  WishlistItem    WishlistItem[]
+  wishlistItem    WishlistItem[]
+  cost            Decimal         @default(0)
+  salePrice       Decimal         @default(0)
+  listPrice       Decimal         @default(0)
+  quantity        Int
+  discountId      Int?
+  discount        Discount?       @relation(fields: [discountId], references: [discountId])
+  variants        Variant[]
+
+  @@unique([sku])
+}
+
+model Variant {
+  variantId  Int     @id @default(autoincrement())
+  variantSku String
+  product    Product @relation(fields: [variantSku], references: [sku])
 }
 
 model Wishlist {
@@ -50,17 +64,15 @@ model Wishlist {
 }
 
 model WishlistItem {
-  wishlistItemId Int            @id @default(autoincrement())
+  wishlistItemId Int       @id @default(autoincrement())
   wishlistId     Int
-  wishlist       Wishlist       @relation(fields: [wishlistId], references: [wishlistId])
+  wishlist       Wishlist  @relation(fields: [wishlistId], references: [wishlistId])
   productId      Int
-  product        Product        @relation(fields: [productId], references: [productId])
-  variantId      Int
-  variant        ProductVariant @relation(fields: [variantId], references: [variantId])
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime?      @updatedAt
+  product        Product   @relation(fields: [productId], references: [productId])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
 
-  @@unique([wishlistId, productId, variantId])
+  @@unique([wishlistId, productId])
 }
 
 model Attributes {
@@ -85,36 +97,6 @@ model Specification {
   imageUrl          String
   product           Product @relation(fields: [productId], references: [productId], onDelete: Cascade)
   productId         Int
-}
-
-model ProductVariant {
-  variantId      Int                    @id @default(autoincrement())
-  productId      Int
-  cost           Decimal                @default(0)
-  salePrice      Decimal                @default(0)
-  listPrice      Decimal                @default(0)
-  quantity       Int
-  discountId     Int?
-  discount       Discount?              @relation(fields: [discountId], references: [discountId])
-  specifications VariantSpecification[]
-  isDeleted      Boolean                @default(false)
-  createdAt      DateTime               @default(now())
-  updatedAt      DateTime?              @updatedAt
-  product        Product                @relation(fields: [productId], references: [productId], onDelete: Cascade)
-  CartItem       CartItem[]
-  descriptions   Json[]
-  highlights     Json[]
-  WishlistItem   WishlistItem[]
-}
-
-model VariantSpecification {
-  id                Int            @id @default(autoincrement())
-  specificationName String
-  specification     String
-  description       String
-  imageUrl          String
-  productVariant    ProductVariant @relation(fields: [variantId], references: [variantId], onDelete: Cascade)
-  variantId         Int
 }
 
 model Category {
@@ -217,35 +199,33 @@ model Cart {
 }
 
 model CartItem {
-  cartId         Int
-  productId      Int
-  variantId      Int
-  quantity       Int
-  discountName   String?
-  discountValue  Decimal?
-  discountType   DiscountType?
-  cart           Cart           @relation(fields: [cartId], references: [cartId])
-  product        Product        @relation(fields: [productId], references: [productId])
-  productVariant ProductVariant @relation(fields: [variantId], references: [variantId])
-  couponId       Int?
-  coupon         Coupon?        @relation(fields: [couponId], references: [couponId])
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime?      @updatedAt
+  cartId        Int
+  productId     Int
+  quantity      Int
+  discountName  String?
+  discountValue Decimal?
+  discountType  DiscountType?
+  cart          Cart          @relation(fields: [cartId], references: [cartId])
+  product       Product       @relation(fields: [productId], references: [productId])
+  couponId      Int?
+  coupon        Coupon?       @relation(fields: [couponId], references: [couponId])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
 
-  @@id([cartId, productId, variantId])
+  @@id([cartId, productId])
 }
 
 model Discount {
-  discountId         Int              @id @default(autoincrement())
+  discountId         Int          @id @default(autoincrement())
   discountName       String
   discountPercentage Decimal?
   discountAmount     Decimal?
   discountType       DiscountType
   coupons            Coupon[]
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime?        @updatedAt
-  ProductVariant     ProductVariant[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime?    @updatedAt
   meta               meta[]
+  Product            Product[]
 }
 
 enum DiscountType {
@@ -327,7 +307,6 @@ model OrderItem {
   orderId       Int
   productId     Int
   quantity      Int
-  variantId     Int
   unitPrice     Decimal
   total         Decimal
   discountName  String?
@@ -339,7 +318,7 @@ model OrderItem {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
 
-  @@id([orderId, productId, variantId])
+  @@id([orderId, productId])
 }
 
 model Payment {
