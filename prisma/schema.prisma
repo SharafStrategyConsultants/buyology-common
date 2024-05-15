@@ -44,6 +44,7 @@ model Product {
   variants        Variant[]
 
   @@unique([sku])
+  @@index([name, sku])
 }
 
 model Variant {
@@ -61,6 +62,7 @@ model Wishlist {
   updatedAt  DateTime?      @updatedAt
 
   @@unique([userId])
+  @@index([userId])
 }
 
 model WishlistItem {
@@ -73,6 +75,7 @@ model WishlistItem {
   updatedAt      DateTime? @updatedAt
 
   @@unique([wishlistId, productId])
+  @@index([wishlistId, productId])
 }
 
 model Attributes {
@@ -81,6 +84,8 @@ model Attributes {
   value         String
   productId     Int
   product       Product @relation(fields: [productId], references: [productId])
+
+  @@index([attributeName, value])
 }
 
 enum ProductType {
@@ -169,6 +174,8 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime?    @updatedAt
   Wishlist    Wishlist?
+
+  @@index([firstName, lastName, email, phone])
 }
 
 model LoginLogs {
