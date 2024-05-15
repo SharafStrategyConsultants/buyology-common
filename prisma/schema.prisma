@@ -21,7 +21,7 @@ model Product {
   sku             String
   warranty        String?
   isDeleted       Boolean         @default(false)
-  meta            meta[]
+  meta            ProductMeta[]
   category        Category?       @relation(fields: [categoryId], references: [categoryId])
   isPublished     Boolean         @default(false)
   productType     ProductType     @default(REFURBISHED)
@@ -45,6 +45,16 @@ model Product {
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model ProductMeta {
+  metaId    Int       @id @default(autoincrement())
+  productId Int?
+  imageUrl  String
+  isDeleted Boolean   @default(false)
+  product   Product?  @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Variant {
@@ -105,40 +115,25 @@ model Specification {
 }
 
 model Category {
-  categoryId    Int        @id @default(autoincrement())
+  categoryId    Int            @id @default(autoincrement())
   name          String
-  isDeleted     Boolean    @default(false)
+  isDeleted     Boolean        @default(false)
   parentId      Int?
-  parent        Category?  @relation("subCategories", fields: [parentId], references: [categoryId])
-  subCategories Category[] @relation("subCategories")
+  parent        Category?      @relation("subCategories", fields: [parentId], references: [categoryId])
+  subCategories Category[]     @relation("subCategories")
   products      Product[]
-  meta          meta[]
+  meta          CategoryMeta[]
   filters       Json[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime?  @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
 }
 
-model SubCategory {
-  subCategoryId Int       @id @default(autoincrement())
-  name          String
-  isDeleted     Boolean   @default(false)
-  categoryId    Int
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
-}
-
-model meta {
+model CategoryMeta {
   metaId     Int       @id @default(autoincrement())
-  productId  Int?
   imageUrl   String
   isDeleted  Boolean   @default(false)
-  product    Product?  @relation(fields: [productId], references: [productId], onDelete: Cascade)
   categoryId Int?
   catogory   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
-  couponId   Int?
-  coupon     Coupon?   @relation(fields: [couponId], references: [couponId])
-  discountId Int?
-  discount   Discount? @relation(fields: [discountId], references: [discountId])
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
 }
@@ -162,9 +157,9 @@ model User {
   userId      Int          @id @default(autoincrement())
   firstName   String
   lastName    String?      @default("")
-  email       String       @unique
+  email       String
   password    String?      @default("")
-  phone       String       @unique
+  phone       String
   userLogings UserLogin[]
   cart        Cart[]
   couponUsers CouponUser[]
@@ -175,6 +170,8 @@ model User {
   updatedAt   DateTime?    @updatedAt
   Wishlist    Wishlist?
 
+  @@unique([phone])
+  @@unique([email])
   @@index([firstName, lastName, email, phone])
 }
 
@@ -223,16 +220,26 @@ model CartItem {
 }
 
 model Discount {
-  discountId         Int          @id @default(autoincrement())
+  discountId         Int            @id @default(autoincrement())
   discountName       String
   discountPercentage Decimal?
   discountAmount     Decimal?
   discountType       DiscountType
   coupons            Coupon[]
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime?    @updatedAt
-  meta               meta[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime?      @updatedAt
+  meta               DiscountMeta[]
   Product            Product[]
+}
+
+model DiscountMeta {
+  metaId     Int       @id @default(autoincrement())
+  imageUrl   String
+  isDeleted  Boolean   @default(false)
+  discountId Int?
+  discount   Discount? @relation(fields: [discountId], references: [discountId], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 enum DiscountType {
@@ -253,9 +260,19 @@ model Coupon {
   numberOfUsers Int
   active        Boolean
   score         Int
-  meta          meta[]
+  meta          CouponMeta[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime?    @updatedAt
+}
+
+model CouponMeta {
+  metaId    Int       @id @default(autoincrement())
+  imageUrl  String
+  isDeleted Boolean   @default(false)
+  couponId  Int?
+  coupon    Coupon?   @relation(fields: [couponId], references: [couponId], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model CouponUser {
