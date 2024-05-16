@@ -14,7 +14,6 @@ datasource db {
 model Product {
   productId       Int             @id @default(autoincrement())
   name            String
-  description     String?
   categoryId      Int?
   tag             String
   modelNumber     String?
