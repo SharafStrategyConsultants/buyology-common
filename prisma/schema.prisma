@@ -33,7 +33,7 @@ model Product {
   attributes      Attributes[]
   Advertisement   Advertisement?  @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId Int?
-  seo             Json
+  seo             Json?
   wishlistItem    WishlistItem[]
   cost            Decimal         @default(0)
   salePrice       Decimal         @default(0)
