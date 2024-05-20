@@ -12,39 +12,51 @@ datasource db {
 }
 
 model Product {
-  productId       Int             @id @default(autoincrement())
-  name            String
-  categoryId      Int?
-  description     String
-  tag             String
-  modelNumber     String?
-  sku             String
-  warranty        Decimal?
-  isDeleted       Boolean         @default(false)
-  meta            ProductMeta[]
-  category        Category?       @relation(fields: [categoryId], references: [categoryId])
-  isPublished     Boolean         @default(false)
-  productType     ProductType     @default(REFURBISHED)
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime?       @updatedAt
-  cartItems       CartItem[]
-  OrderItem       OrderItem[]
-  specifications  Specification[]
-  attributes      Attributes[]
-  Advertisement   Advertisement?  @relation(fields: [advertisementId], references: [advertisementId])
-  advertisementId Int?
-  seo             Json?
-  wishlistItem    WishlistItem[]
-  cost            Decimal         @default(0)
-  salePrice       Decimal         @default(0)
-  listPrice       Decimal         @default(0)
-  quantity        Int
-  discountId      Int?
-  discount        Discount?       @relation(fields: [discountId], references: [discountId])
-  variants        Variant[]
+  productId         Int                 @id @default(autoincrement())
+  name              String
+  categoryId        Int?
+  description       String
+  tag               String
+  modelNumber       String?
+  sku               String
+  warranty          Decimal?
+  isDeleted         Boolean             @default(false)
+  meta              ProductMeta[]
+  category          Category?           @relation(fields: [categoryId], references: [categoryId])
+  isPublished       Boolean             @default(false)
+  productType       ProductType         @default(REFURBISHED)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
+  cartItems         CartItem[]
+  OrderItem         OrderItem[]
+  specifications    Specification[]
+  Advertisement     Advertisement?      @relation(fields: [advertisementId], references: [advertisementId])
+  advertisementId   Int?
+  seo               Json?
+  wishlistItem      WishlistItem[]
+  cost              Decimal             @default(0)
+  salePrice         Decimal             @default(0)
+  listPrice         Decimal             @default(0)
+  quantity          Int
+  discountId        Int?
+  discount          Discount?           @relation(fields: [discountId], references: [discountId])
+  variants          Variant[]
+  ProductAttributes ProductAttributes[]
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model ProductAttributes {
+  productAttributeId Int           @id @default(autoincrement())
+  attributeId        Int
+  attributeItemId    Int
+  attributeItems     AttributeItem @relation(fields: [attributeItemId], references: [attributeItemId])
+  attrubute          Attributes    @relation(fields: [attributeId], references: [attributeId])
+  productId          Int
+  product            Product       @relation(fields: [productId], references: [productId])
+
+  @@index([attributeId, productId])
 }
 
 model ProductMeta {
@@ -88,16 +100,6 @@ model WishlistItem {
   @@index([wishlistId, productId])
 }
 
-model Attributes {
-  attributeId   Int     @id @default(autoincrement())
-  attributeName String
-  value         String
-  productId     Int
-  product       Product @relation(fields: [productId], references: [productId])
-
-  @@index([attributeName, value])
-}
-
 enum ProductType {
   REFURBISHED
   BRAND_NEW
@@ -113,17 +115,47 @@ model Specification {
 }
 
 model Category {
-  categoryId    Int            @id @default(autoincrement())
-  name          String
-  isDeleted     Boolean        @default(false)
-  parentId      Int?
-  parent        Category?      @relation("subCategories", fields: [parentId], references: [categoryId])
-  subCategories Category[]     @relation("subCategories")
-  products      Product[]
-  meta          CategoryMeta[]
-  filters       Json[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime?      @updatedAt
+  categoryId        Int                 @id @default(autoincrement())
+  name              String
+  isDeleted         Boolean             @default(false)
+  parentId          Int?
+  parent            Category?           @relation("subCategories", fields: [parentId], references: [categoryId])
+  subCategories     Category[]          @relation("subCategories")
+  products          Product[]
+  meta              CategoryMeta[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
+  attributeId       Int?
+  CategoryAttribute CategoryAttribute[]
+}
+
+model CategoryAttribute {
+  categoryAttributeId Int        @id @default(autoincrement())
+  categoryId          Int
+  category            Category   @relation(fields: [categoryId], references: [categoryId])
+  attributeId         Int
+  Attributes          Attributes @relation(fields: [attributeId], references: [attributeId])
+}
+
+model Attributes {
+  attributeId        Int                 @id @default(autoincrement())
+  type               String
+  attributeName      String
+  items              AttributeItem[]
+  ProductAttributes  ProductAttributes[]
+  CategoryAttributes CategoryAttribute[]
+}
+
+model AttributeItem {
+  attributeItemId       Int                 @id @default(autoincrement())
+  attributeName         String
+  value                 String
+  Attributes            Attributes?         @relation(fields: [attributeId], references: [attributeId])
+  attributeId Int?
+  ProductAttributes     ProductAttributes[]
+
+  @@unique([attributeName, value])
+  @@index([attributeName, value])
 }
 
 model CategoryMeta {
