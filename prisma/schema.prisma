@@ -150,7 +150,7 @@ model AttributeItem {
   attributeItemId   Int                 @id @default(autoincrement())
   attributeName     String
   value             String
-  Attributes        Attributes          @relation(fields: [attributeId], references: [attributeId])
+  Attributes        Attributes          @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   attributeId       Int
   ProductAttributes ProductAttributes[]
 
