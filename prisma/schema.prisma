@@ -147,14 +147,14 @@ model Attributes {
 }
 
 model AttributeItem {
-  attributeItemId       Int                 @id @default(autoincrement())
-  attributeName         String
-  value                 String
-  Attributes            Attributes?         @relation(fields: [attributeId], references: [attributeId])
-  attributeId Int?
-  ProductAttributes     ProductAttributes[]
+  attributeItemId   Int                 @id @default(autoincrement())
+  attributeName     String
+  value             String
+  Attributes        Attributes          @relation(fields: [attributeId], references: [attributeId])
+  attributeId       Int
+  ProductAttributes ProductAttributes[]
 
-  @@unique([attributeName, value])
+  @@unique([attributeId, value])
   @@index([attributeName, value])
 }
 
