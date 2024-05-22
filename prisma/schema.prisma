@@ -115,35 +115,36 @@ model Specification {
 }
 
 model Category {
-  categoryId        Int                 @id @default(autoincrement())
-  name              String
-  isDeleted         Boolean             @default(false)
-  parentId          Int?
-  parent            Category?           @relation("subCategories", fields: [parentId], references: [categoryId])
-  subCategories     Category[]          @relation("subCategories")
-  products          Product[]
-  meta              CategoryMeta[]
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime?           @updatedAt
-  attributeId       Int?
-  CategoryAttribute CategoryAttribute[]
+  categoryId    Int            @id @default(autoincrement())
+  name          String
+  isDeleted     Boolean        @default(false)
+  parentId      Int?
+  parent        Category?      @relation("subCategories", fields: [parentId], references: [categoryId])
+  subCategories Category[]     @relation("subCategories")
+  products      Product[]
+  meta          CategoryMeta[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
+  attributeId   Int?
+  AttributeSet  AttributeSet[]
 }
 
-model CategoryAttribute {
-  categoryAttributeId Int        @id @default(autoincrement())
-  categoryId          Int
-  category            Category   @relation(fields: [categoryId], references: [categoryId])
-  attributeId         Int
-  Attributes          Attributes @relation(fields: [attributeId], references: [attributeId])
+model AttributeSet {
+  attributeSetId   Int        @id @default(autoincrement())
+  categoryId       Int
+  attributeSetName String
+  category         Category   @relation(fields: [categoryId], references: [categoryId])
+  attributeId      Int
+  Attributes       Attributes @relation(fields: [attributeId], references: [attributeId])
 }
 
 model Attributes {
-  attributeId        Int                 @id @default(autoincrement())
-  type               String
-  attributeName      String
-  items              AttributeItem[]
-  ProductAttributes  ProductAttributes[]
-  CategoryAttributes CategoryAttribute[]
+  attributeId       Int                 @id @default(autoincrement())
+  type              String
+  attributeName     String
+  items             AttributeItem[]
+  ProductAttributes ProductAttributes[]
+  AttributeSet      AttributeSet[]
 }
 
 model AttributeItem {
