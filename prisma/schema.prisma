@@ -55,6 +55,8 @@ model ProductAttributes {
   attrubute          Attributes    @relation(fields: [attributeId], references: [attributeId])
   productId          Int
   product            Product       @relation(fields: [productId], references: [productId])
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime?     @updatedAt
 
   @@index([attributeId, productId])
 }
@@ -70,9 +72,11 @@ model ProductMeta {
 }
 
 model Variant {
-  variantId  Int     @id @default(autoincrement())
+  variantId  Int       @id @default(autoincrement())
   variantSku String
-  product    Product @relation(fields: [variantSku], references: [sku])
+  product    Product   @relation(fields: [variantSku], references: [sku])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model Wishlist {
@@ -107,11 +111,13 @@ enum ProductType {
 }
 
 model Specification {
-  id                Int     @id @default(autoincrement())
+  id                Int       @id @default(autoincrement())
   specificationName String
   specification     String
-  product           Product @relation(fields: [productId], references: [productId], onDelete: Cascade)
+  product           Product   @relation(fields: [productId], references: [productId], onDelete: Cascade)
   productId         Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime? @updatedAt
 }
 
 model Category {
@@ -135,6 +141,8 @@ model AttributeSet {
   Category         Category?          @relation(fields: [categoryId], references: [categoryId])
   categoryId       Int
   items            AttributeSetItem[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime?          @updatedAt
 }
 
 model AttributeSetItem {
@@ -143,6 +151,8 @@ model AttributeSetItem {
   attributeId        Int
   Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId])
   AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime?    @updatedAt
 }
 
 model Attributes {
@@ -152,6 +162,8 @@ model Attributes {
   items             AttributeItem[]
   ProductAttributes ProductAttributes[]
   AttributeSetItem  AttributeSetItem[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
 }
 
 model AttributeItem {
@@ -161,6 +173,8 @@ model AttributeItem {
   Attributes        Attributes          @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   attributeId       Int
   ProductAttributes ProductAttributes[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
 
   @@unique([attributeId, value])
   @@index([attributeName, value])
