@@ -142,7 +142,7 @@ model AttributeSetItem {
   attributeSetId     Int
   attributeId        Int
   Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId])
-  AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId])
+  AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
 }
 
 model Attributes {
