@@ -130,12 +130,19 @@ model Category {
 }
 
 model AttributeSet {
-  attributeSetId   Int        @id @default(autoincrement())
-  categoryId       Int
+  attributeSetId   Int                @id @default(autoincrement())
   attributeSetName String
-  category         Category   @relation(fields: [categoryId], references: [categoryId])
-  attributeId      Int
-  Attributes       Attributes @relation(fields: [attributeId], references: [attributeId])
+  Category         Category?          @relation(fields: [categoryId], references: [categoryId])
+  categoryId       Int
+  items            AttributeSetItem[]
+}
+
+model AttributeSetItem {
+  attributeSetItemId Int          @id @default(autoincrement())
+  attributeSetId     Int
+  attributeId        Int
+  Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId])
+  AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId])
 }
 
 model Attributes {
@@ -144,7 +151,7 @@ model Attributes {
   attributeName     String
   items             AttributeItem[]
   ProductAttributes ProductAttributes[]
-  AttributeSet      AttributeSet[]
+  AttributeSetItem  AttributeSetItem[]
 }
 
 model AttributeItem {
