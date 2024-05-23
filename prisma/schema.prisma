@@ -124,6 +124,9 @@ model Category {
   categoryId    Int            @id @default(autoincrement())
   name          String
   isDeleted     Boolean        @default(false)
+  isInMenu      Boolean
+  status        Boolean
+  seo           Json
   parentId      Int?
   parent        Category?      @relation("subCategories", fields: [parentId], references: [categoryId])
   subCategories Category[]     @relation("subCategories")
