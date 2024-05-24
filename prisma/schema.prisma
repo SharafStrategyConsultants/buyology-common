@@ -152,7 +152,7 @@ model AttributeSetItem {
   attributeSetItemId Int          @id @default(autoincrement())
   attributeSetId     Int
   attributeId        Int
-  Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId])
+  Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
   createdAt          DateTime     @default(now())
   updatedAt          DateTime?    @updatedAt
