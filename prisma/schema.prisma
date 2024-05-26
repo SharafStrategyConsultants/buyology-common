@@ -113,7 +113,7 @@ enum ProductType {
 model Specification {
   id                Int       @id @default(autoincrement())
   specificationName String
-  specification     String
+  value             String
   product           Product   @relation(fields: [productId], references: [productId], onDelete: Cascade)
   productId         Int
   createdAt         DateTime  @default(now())
