@@ -15,10 +15,10 @@ model Product {
   productId         Int                 @id @default(autoincrement())
   name              String
   categoryId        Int?
-  description       String
-  tag               String
+  description       String?
+  tag               String?
   modelNumber       String?
-  sku               String
+  sku               Int                 @default(autoincrement())
   warranty          Decimal?
   isDeleted         Boolean             @default(false)
   meta              ProductMeta[]
@@ -37,7 +37,7 @@ model Product {
   cost              Decimal             @default(0)
   salePrice         Decimal             @default(0)
   listPrice         Decimal             @default(0)
-  quantity          Int
+  quantity          Int?
   discountId        Int?
   discount          Discount?           @relation(fields: [discountId], references: [discountId])
   variants          Variant[]
@@ -73,7 +73,7 @@ model ProductMeta {
 
 model Variant {
   variantId  Int       @id @default(autoincrement())
-  variantSku String
+  variantSku Int
   product    Product   @relation(fields: [variantSku], references: [sku])
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
