@@ -36,7 +36,7 @@ model Product {
   wishlistItem      WishlistItem[]
   cost              Decimal             @default(0)
   salePrice         Decimal             @default(0)
-  listPrice         Decimal             @default(0)
+  strikingPrice     Decimal             @default(0)
   quantity          Int?
   discountId        Int?
   discount          Discount?           @relation(fields: [discountId], references: [discountId])
@@ -49,14 +49,14 @@ model Product {
 }
 
 model ProductDiscount {
-  discountId   Int       @id @default(autoincrement())
-  amount       Int?
-  productId    Int
-  product      Product   @relation(fields: [productId], references: [productId])
-  startFrom    DateTime?
-  startTo      DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
+  discountId Int       @id @default(autoincrement())
+  amount     Int?
+  productId  Int
+  product    Product   @relation(fields: [productId], references: [productId])
+  startFrom  DateTime?
+  startTo    DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
 
 model ProductAttributes {
