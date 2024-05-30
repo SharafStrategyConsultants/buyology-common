@@ -50,7 +50,6 @@ model Product {
 
 model ProductDiscount {
   discountId   Int       @id @default(autoincrement())
-  discountName String?
   amount       Int?
   productId    Int
   product      Product   @relation(fields: [productId], references: [productId])
