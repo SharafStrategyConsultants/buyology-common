@@ -43,6 +43,7 @@ model Product {
   variants          Variant[]
   ProductAttributes ProductAttributes[]
   ProductDiscount   ProductDiscount[]
+  Shipping          Shipping[]
 
   @@unique([sku])
   @@index([name, sku])
@@ -57,6 +58,15 @@ model ProductDiscount {
   startTo    DateTime?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
+}
+
+model Shipping {
+  shippingId     Int      @id @default(autoincrement())
+  shippingDays   Int?
+  city           String?
+  shippingCharge Decimal?
+  productId      Int
+  product        Product  @relation(fields: [productId], references: [productId])
 }
 
 model ProductAttributes {
