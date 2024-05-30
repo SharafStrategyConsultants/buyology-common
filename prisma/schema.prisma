@@ -42,9 +42,22 @@ model Product {
   discount          Discount?           @relation(fields: [discountId], references: [discountId])
   variants          Variant[]
   ProductAttributes ProductAttributes[]
+  ProductDiscount   ProductDiscount[]
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model ProductDiscount {
+  discountId   Int       @id @default(autoincrement())
+  discountName String?
+  amount       Int?
+  productId    Int
+  product      Product   @relation(fields: [productId], references: [productId])
+  startFrom    DateTime?
+  startTo      DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }
 
 model ProductAttributes {
