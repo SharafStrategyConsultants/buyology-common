@@ -12,39 +12,43 @@ datasource db {
 }
 
 model Product {
-  productId         Int                 @id @default(autoincrement())
+  productId         Int                     @id @default(autoincrement())
   name              String
   categoryId        Int?
   description       String?
   tag               String?
   modelNumber       String?
-  sku               Int                 @default(autoincrement())
+  sku               Int                     @default(autoincrement())
   warranty          Decimal?
-  isDeleted         Boolean             @default(false)
+  isDeleted         Boolean                 @default(false)
   meta              ProductMeta[]
-  category          Category?           @relation(fields: [categoryId], references: [categoryId])
-  isPublished       Boolean             @default(false)
-  productType       ProductType         @default(REFURBISHED)
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime?           @updatedAt
+  category          Category?               @relation(fields: [categoryId], references: [categoryId])
+  isPublished       Boolean                 @default(false)
+  productType       ProductType             @default(REFURBISHED)
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime?               @updatedAt
   cartItems         CartItem[]
   OrderItem         OrderItem[]
   specifications    Specification[]
-  Advertisement     Advertisement?      @relation(fields: [advertisementId], references: [advertisementId])
+  Advertisement     Advertisement?          @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId   Int?
   seo               Json?
   wishlistItem      WishlistItem[]
-  cost              Decimal             @default(0)
-  salePrice         Decimal             @default(0)
-  strikingPrice     Decimal             @default(0)
+  cost              Decimal                 @default(0)
+  salePrice         Decimal                 @default(0)
+  strikingPrice     Decimal                 @default(0)
   quantity          Int?
   discountId        Int?
-  discount          Discount?           @relation(fields: [discountId], references: [discountId])
+  discount          Discount?               @relation(fields: [discountId], references: [discountId])
   ProductAttributes ProductAttributes[]
   ProductDiscount   ProductDiscount[]
   Shipping          Shipping[]
-  variants          ProductVariant[]    @relation("ProductVariants")
-  variantProducts   ProductVariant[]    @relation("VariantProducts")
+  variants          ProductVariant[]        @relation("ProductVariants")
+  variantProducts   ProductVariant[]        @relation("VariantProducts")
+  relates           RelatedProduct[]        @relation("ProductRelated")
+  productRelated    RelatedProduct[]        @relation("RelatedProducts")
+  together          BoughtTogetherProduct[] @relation("ProductTogether")
+  togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
 
   @@unique([sku])
   @@index([name, sku])
@@ -101,6 +105,24 @@ model ProductVariant {
   variant   Product @relation("VariantProducts", fields: [variantId], references: [productId])
 
   @@id([productId, variantId])
+}
+
+model RelatedProduct {
+  productId Int
+  relatedId Int
+  product   Product @relation("ProductRelated", fields: [productId], references: [productId])
+  related   Product @relation("RelatedProducts", fields: [relatedId], references: [productId])
+
+  @@id([productId, relatedId])
+}
+
+model BoughtTogetherProduct {
+  productId  Int
+  togetherId Int
+  product    Product @relation("ProductTogether", fields: [productId], references: [productId])
+  together   Product @relation("TogetherProducts", fields: [togetherId], references: [productId])
+
+  @@id([productId, togetherId])
 }
 
 model Wishlist {
