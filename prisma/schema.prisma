@@ -18,7 +18,7 @@ model Product {
   description       String?
   tag               String?
   modelNumber       String?
-  sku               Int                 @default(autoincrement())
+  sku               Int                 @default(dbgenerated("generate_prod_id()"))
   warranty          Decimal?
   isDeleted         Boolean             @default(false)
   meta              ProductMeta[]
