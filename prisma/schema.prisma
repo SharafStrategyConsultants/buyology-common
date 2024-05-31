@@ -18,7 +18,7 @@ model Product {
   description       String?
   tag               String?
   modelNumber       String?
-  sku               Int                 @default(dbgenerated("generate_buyo_id()"))
+  sku               Int                 @default(autoincrement())
   warranty          Decimal?
   isDeleted         Boolean             @default(false)
   meta              ProductMeta[]
