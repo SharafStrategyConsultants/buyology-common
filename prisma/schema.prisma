@@ -40,10 +40,11 @@ model Product {
   quantity          Int?
   discountId        Int?
   discount          Discount?           @relation(fields: [discountId], references: [discountId])
-  variants          Variant[]
   ProductAttributes ProductAttributes[]
   ProductDiscount   ProductDiscount[]
   Shipping          Shipping[]
+  variants          ProductVariant[]    @relation("ProductVariants")
+  variantProducts   ProductVariant[]    @relation("VariantProducts")
 
   @@unique([sku])
   @@index([name, sku])
@@ -93,12 +94,13 @@ model ProductMeta {
   updatedAt DateTime? @updatedAt
 }
 
-model Variant {
-  variantId  Int       @id @default(autoincrement())
-  variantSku Int
-  product    Product   @relation(fields: [variantSku], references: [sku])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
+model ProductVariant {
+  productId Int
+  variantId Int
+  product   Product @relation("ProductVariants", fields: [productId], references: [productId])
+  variant   Product @relation("VariantProducts", fields: [variantId], references: [productId])
+
+  @@id([productId, variantId])
 }
 
 model Wishlist {
