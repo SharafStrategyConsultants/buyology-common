@@ -47,7 +47,7 @@ model Product {
   variantProducts   ProductVariant[]        @relation("VariantProducts")
   relates           RelatedProduct[]        @relation("ProductRelated")
   productRelated    RelatedProduct[]        @relation("RelatedProducts")
-  together          BoughtTogetherProduct[] @relation("ProductTogether")
+  togethers          BoughtTogetherProduct[] @relation("ProductTogether")
   togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
 
   @@unique([sku])
@@ -102,27 +102,27 @@ model ProductVariant {
   productId Int
   variantId Int
   product   Product @relation("ProductVariants", fields: [productId], references: [productId])
-  variant   Product @relation("VariantProducts", fields: [variantId], references: [productId])
+  variant   Product @relation("VariantProducts", fields: [variantId], references: [productId], onDelete: Cascade)
 
   @@id([productId, variantId])
 }
 
 model RelatedProduct {
-  productId Int
-  relatedId Int
-  product   Product @relation("ProductRelated", fields: [productId], references: [productId])
-  related   Product @relation("RelatedProducts", fields: [relatedId], references: [productId])
+  productId        Int
+  relatedProductId Int
+  product          Product @relation("ProductRelated", fields: [productId], references: [productId])
+  relatedProducts  Product @relation("RelatedProducts", fields: [relatedProductId], references: [productId], onDelete: Cascade)
 
-  @@id([productId, relatedId])
+  @@id([productId, relatedProductId])
 }
 
 model BoughtTogetherProduct {
-  productId  Int
-  togetherId Int
-  product    Product @relation("ProductTogether", fields: [productId], references: [productId])
-  together   Product @relation("TogetherProducts", fields: [togetherId], references: [productId])
+  productId           Int
+  togetherProductIdId Int
+  product             Product @relation("ProductTogether", fields: [productId], references: [productId])
+  togetherProducts    Product @relation("TogetherProducts", fields: [togetherProductIdId], references: [productId], onDelete: Cascade)
 
-  @@id([productId, togetherId])
+  @@id([productId, togetherProductIdId])
 }
 
 model Wishlist {
