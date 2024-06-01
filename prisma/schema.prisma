@@ -47,7 +47,7 @@ model Product {
   variantProducts   ProductVariant[]        @relation("VariantProducts")
   relates           RelatedProduct[]        @relation("ProductRelated")
   productRelated    RelatedProduct[]        @relation("RelatedProducts")
-  togethers          BoughtTogetherProduct[] @relation("ProductTogether")
+  togethers         BoughtTogetherProduct[] @relation("ProductTogether")
   togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
 
   @@unique([sku])
@@ -84,6 +84,8 @@ model ProductAttributes {
   product            Product       @relation(fields: [productId], references: [productId])
   createdAt          DateTime      @default(now())
   updatedAt          DateTime?     @updatedAt
+  attributeSetId     Int
+  attributeSet       AttributeSet  @relation(fields: [attributeSetId], references: [attributeSetId])
 
   @@index([attributeId, productId])
 }
@@ -117,10 +119,10 @@ model RelatedProduct {
 }
 
 model BoughtTogetherProduct {
-  productId           Int
+  productId         Int
   togetherProductId Int
-  product             Product @relation("ProductTogether", fields: [productId], references: [productId])
-  togetherProducts    Product @relation("TogetherProducts", fields: [togetherProductId], references: [productId], onDelete: Cascade)
+  product           Product @relation("ProductTogether", fields: [productId], references: [productId])
+  togetherProducts  Product @relation("TogetherProducts", fields: [togetherProductId], references: [productId], onDelete: Cascade)
 
   @@id([productId, togetherProductId])
 }
@@ -185,13 +187,14 @@ model Category {
 }
 
 model AttributeSet {
-  attributeSetId   Int                @id @default(autoincrement())
-  attributeSetName String
-  Category         Category?          @relation(fields: [categoryId], references: [categoryId])
-  categoryId       Int
-  items            AttributeSetItem[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime?          @updatedAt
+  attributeSetId    Int                 @id @default(autoincrement())
+  attributeSetName  String
+  Category          Category?           @relation(fields: [categoryId], references: [categoryId])
+  categoryId        Int
+  items             AttributeSetItem[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
+  ProductAttributes ProductAttributes[]
 }
 
 model AttributeSetItem {
