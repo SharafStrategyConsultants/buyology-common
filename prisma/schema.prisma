@@ -118,11 +118,11 @@ model RelatedProduct {
 
 model BoughtTogetherProduct {
   productId           Int
-  togetherProductIdId Int
+  togetherProductId Int
   product             Product @relation("ProductTogether", fields: [productId], references: [productId])
-  togetherProducts    Product @relation("TogetherProducts", fields: [togetherProductIdId], references: [productId], onDelete: Cascade)
+  togetherProducts    Product @relation("TogetherProducts", fields: [togetherProductId], references: [productId], onDelete: Cascade)
 
-  @@id([productId, togetherProductIdId])
+  @@id([productId, togetherProductId])
 }
 
 model Wishlist {
