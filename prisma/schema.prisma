@@ -78,8 +78,8 @@ model ProductAttributes {
   productAttributeId Int           @id @default(autoincrement())
   attributeId        Int
   attributeItemId    Int
-  attributeItems     AttributeItem @relation(fields: [attributeItemId], references: [attributeItemId])
-  attrubute          Attributes    @relation(fields: [attributeId], references: [attributeId])
+  attributeItem      AttributeItem @relation(fields: [attributeItemId], references: [attributeItemId])
+  attribute          Attributes    @relation(fields: [attributeId], references: [attributeId])
   productId          Int
   product            Product       @relation(fields: [productId], references: [productId])
   createdAt          DateTime      @default(now())
