@@ -265,6 +265,7 @@ model User {
   email        String
   password     String?        @default("")
   nationality  String?
+  gender       Gender?
   dob          DateTime?
   userLogings  UserLogin[]
   cart         Cart[]
@@ -279,6 +280,11 @@ model User {
 
   @@unique([email])
   @@index([firstName, lastName, email])
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
 
 model phoneNumbers {
