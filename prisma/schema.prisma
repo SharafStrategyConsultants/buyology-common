@@ -252,7 +252,7 @@ model Address {
   countryCode   String
   contactNumber String
   userId        Int?
-  user          User?          @relation(fields: [userId], references: [userId])
+  user          User?          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   addresses     OrderAddress[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime?      @updatedAt
@@ -292,7 +292,7 @@ model phoneNumbers {
   phone       String
   countryCode String
   userId      Int
-  user        User   @relation(fields: [userId], references: [userId])
+  user        User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@unique([phone])
   @@index([phone])
