@@ -103,7 +103,7 @@ model ProductMeta {
 model ProductVariant {
   productId Int
   variantId Int
-  product   Product @relation("ProductVariants", fields: [productId], references: [productId],onDelete: Cascade)
+  product   Product @relation("ProductVariants", fields: [productId], references: [productId], onDelete: Cascade)
   variant   Product @relation("VariantProducts", fields: [variantId], references: [productId], onDelete: Cascade)
 
   @@id([productId, variantId])
@@ -112,7 +112,7 @@ model ProductVariant {
 model RelatedProduct {
   productId        Int
   relatedProductId Int
-  product          Product @relation("ProductRelated", fields: [productId], references: [productId],onDelete: Cascade)
+  product          Product @relation("ProductRelated", fields: [productId], references: [productId], onDelete: Cascade)
   relatedProducts  Product @relation("RelatedProducts", fields: [relatedProductId], references: [productId], onDelete: Cascade)
 
   @@id([productId, relatedProductId])
@@ -121,7 +121,7 @@ model RelatedProduct {
 model BoughtTogetherProduct {
   productId         Int
   togetherProductId Int
-  product           Product @relation("ProductTogether", fields: [productId], references: [productId],onDelete: Cascade)
+  product           Product @relation("ProductTogether", fields: [productId], references: [productId], onDelete: Cascade)
   togetherProducts  Product @relation("TogetherProducts", fields: [togetherProductId], references: [productId], onDelete: Cascade)
 
   @@id([productId, togetherProductId])
@@ -243,40 +243,53 @@ model CategoryMeta {
 }
 
 model Address {
-  addressId Int            @id @default(autoincrement())
-  address   String
-  city      String
-  district  String
-  state     String
-  country   String
-  pinCode   String
-  userId    Int?
-  user      User?          @relation(fields: [userId], references: [userId])
-  addresses OrderAddress[]
-  createdAt DateTime       @default(now())
-  updatedAt DateTime?      @updatedAt
+  addressId     Int            @id @default(autoincrement())
+  Building      String
+  landMark      String?
+  area          String?
+  region        String
+  country       String
+  countryCode   String
+  contactNumber String
+  userId        Int?
+  user          User?          @relation(fields: [userId], references: [userId])
+  addresses     OrderAddress[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
 }
 
 model User {
-  userId      Int          @id @default(autoincrement())
-  firstName   String
-  lastName    String?      @default("")
-  email       String
-  password    String?      @default("")
+  userId       Int            @id @default(autoincrement())
+  firstName    String
+  lastName     String?        @default("")
+  email        String
+  password     String?        @default("")
+  nationality  String?
+  dob          DateTime?
+  userLogings  UserLogin[]
+  cart         Cart[]
+  couponUsers  CouponUser[]
+  orders       Order[]
+  addresses    Address[]
+  token        String         @unique
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime?      @updatedAt
+  Wishlist     Wishlist?
+  phoneNumbers phoneNumbers[]
+
+  @@unique([email])
+  @@index([firstName, lastName, email])
+}
+
+model phoneNumbers {
+  phoneId     Int    @id @default(autoincrement())
   phone       String
-  userLogings UserLogin[]
-  cart        Cart[]
-  couponUsers CouponUser[]
-  orders      Order[]
-  addresses   Address[]
-  token       String       @unique
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime?    @updatedAt
-  Wishlist    Wishlist?
+  countryCode String
+  userId      Int
+  user        User   @relation(fields: [userId], references: [userId])
 
   @@unique([phone])
-  @@unique([email])
-  @@index([firstName, lastName, email, phone])
+  @@index([phone])
 }
 
 model LoginLogs {
