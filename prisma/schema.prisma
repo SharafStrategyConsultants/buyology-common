@@ -58,7 +58,7 @@ model ProductDiscount {
   discountId Int       @id @default(autoincrement())
   amount     Int?
   productId  Int
-  product    Product   @relation(fields: [productId], references: [productId])
+  product    Product   @relation(fields: [productId], references: [productId], onDelete: Cascade)
   startFrom  DateTime?
   startTo    DateTime?
   createdAt  DateTime  @default(now())
@@ -71,21 +71,21 @@ model Shipping {
   city           String?
   shippingCharge Decimal?
   productId      Int
-  product        Product  @relation(fields: [productId], references: [productId])
+  product        Product  @relation(fields: [productId], references: [productId], onDelete: Cascade)
 }
 
 model ProductAttributes {
   productAttributeId Int           @id @default(autoincrement())
   attributeId        Int
   attributeItemId    Int
-  attributeItem      AttributeItem @relation(fields: [attributeItemId], references: [attributeItemId])
-  attribute          Attributes    @relation(fields: [attributeId], references: [attributeId])
+  attributeItem      AttributeItem @relation(fields: [attributeItemId], references: [attributeItemId], onDelete: Cascade)
+  attribute          Attributes    @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   productId          Int
-  product            Product       @relation(fields: [productId], references: [productId])
+  product            Product       @relation(fields: [productId], references: [productId], onDelete: Cascade)
   createdAt          DateTime      @default(now())
   updatedAt          DateTime?     @updatedAt
   attributeSetId     Int
-  attributeSet       AttributeSet  @relation(fields: [attributeSetId], references: [attributeSetId])
+  attributeSet       AttributeSet  @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
 
   @@index([attributeId, productId])
 }
