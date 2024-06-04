@@ -424,7 +424,7 @@ enum PaymentMethods {
 }
 
 model Order {
-  orderId            Int            @id() @default(autoincrement())
+  orderId            String            @id()
   userId             Int
   user               User           @relation(fields: [userId], references: [userId])
   status             OrderStaus
@@ -442,7 +442,7 @@ model Order {
 }
 
 model OrderAddress {
-  orderId   Int
+  orderId   String
   order     Order   @relation(fields: [orderId], references: [orderId])
   addressId Int
   address   Address @relation(fields: [addressId], references: [addressId])
@@ -451,7 +451,7 @@ model OrderAddress {
 }
 
 model OrderItem {
-  orderId       Int
+  orderId       String
   productId     Int
   quantity      Int
   unitPrice     Decimal
@@ -470,7 +470,7 @@ model OrderItem {
 
 model Payment {
   paymentId     Int            @id() @default(autoincrement())
-  orderId       Int
+  orderId       String
   order         Order          @relation(fields: [orderId], references: [orderId])
   paymentMethod PaymentMethods
   transactionId String?
