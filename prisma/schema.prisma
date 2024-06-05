@@ -427,7 +427,7 @@ enum PaymentMethods {
 }
 
 model Order {
-  orderId            String               @id() @default(dbgenerated("cuid(BA)"))
+  orderId            String               @id() @default(dbgenerated("concat('BA', cuid())"))
   userId             Int
   user               User                 @relation(fields: [userId], references: [userId])
   status             OrderStaus
