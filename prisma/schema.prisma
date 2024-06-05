@@ -454,7 +454,7 @@ model OrderItem {
   orderId            String
   productId          Int
   quantity           Int
-  cumulativeQuantity Int
+  cumulativeQuantity Int           @default(0)
   unitPrice          Decimal
   total              Decimal
   discountName       String?
