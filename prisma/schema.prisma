@@ -411,8 +411,11 @@ model CouponUser {
 
 enum OrderStaus {
   PENDING
-  SHIPPED
+  PROCEEDED
+  PACKED
+  OUT_FOR_DELIVERY
   DELIVERED
+  COMPLETED
   CANCELED
 }
 
