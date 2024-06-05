@@ -424,7 +424,7 @@ enum PaymentMethods {
 }
 
 model Order {
-  orderId            String            @id()
+  orderId            String         @id()
   userId             Int
   user               User           @relation(fields: [userId], references: [userId])
   status             OrderStaus
@@ -451,19 +451,20 @@ model OrderAddress {
 }
 
 model OrderItem {
-  orderId       String
-  productId     Int
-  quantity      Int
-  unitPrice     Decimal
-  total         Decimal
-  discountName  String?
-  discountValue Decimal?
-  discountType  DiscountType?
-  order         Order         @relation(fields: [orderId], references: [orderId])
-  product       Product       @relation(fields: [productId], references: [productId])
-  discount      Decimal?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?     @updatedAt
+  orderId            String
+  productId          Int
+  quantity           Int
+  cumulativeQuantity Int
+  unitPrice          Decimal
+  total              Decimal
+  discountName       String?
+  discountValue      Decimal?
+  discountType       DiscountType?
+  order              Order         @relation(fields: [orderId], references: [orderId])
+  product            Product       @relation(fields: [productId], references: [productId])
+  discount           Decimal?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime?     @updatedAt
 
   @@id([orderId, productId])
 }
