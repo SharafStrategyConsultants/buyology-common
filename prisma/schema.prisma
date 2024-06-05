@@ -427,29 +427,42 @@ enum PaymentMethods {
 }
 
 model Order {
-  orderId            String         @id()
+  orderId            String               @id() @default(dbgenerated("BA"))
   userId             Int
-  user               User           @relation(fields: [userId], references: [userId])
+  user               User                 @relation(fields: [userId], references: [userId])
   status             OrderStaus
-  totalDiscountSum   Decimal        @default(0)
+  totalDiscountSum   Decimal              @default(0)
   totalCost          Decimal
   totalSumWithCharge Decimal?
-  totalItem          Int            @default(0)
+  totalItem          Int                  @default(0)
   OrderItem          OrderItem[]
   addresses          OrderAddress[]
   shippingCharge     Decimal?
   expectedDelivery   DateTime?
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime?      @updatedAt
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime?            @updatedAt
   Payment            Payment[]
+  OrderStatusHistory OrderStatusHistory[]
+
   @@index([status])
+}
+
+model OrderStatusHistory {
+  orderStatusId Int        @id() @default(autoincrement())
+  orderId       String
+  order         Order      @relation(fields: [orderId], references: [orderId])
+  satus         OrderStaus
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime?  @updatedAt
 }
 
 model OrderAddress {
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [orderId])
+  order     Order     @relation(fields: [orderId], references: [orderId])
   addressId Int
-  address   Address @relation(fields: [addressId], references: [addressId])
+  address   Address   @relation(fields: [addressId], references: [addressId])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@id([orderId, addressId])
 }
@@ -482,6 +495,7 @@ model Payment {
   amount        Decimal
   status        PaymentStatus
   createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
 }
 
 enum PaymentStatus {
