@@ -489,7 +489,7 @@ model OrderItem {
 model Payment {
   paymentId     Int            @id() @default(autoincrement())
   orderId       String
-  order         Order          @relation(fields: [orderId], references: [orderId])
+  order         Order          @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
   paymentMethod PaymentMethods
   transactionId String?
   amount        Decimal
