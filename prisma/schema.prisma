@@ -437,6 +437,8 @@ model Order {
   totalItem          Int                  @default(0)
   OrderItem          OrderItem[]
   addresses          OrderAddress[]
+  riderId            Int?
+  rider              Rider?               @relation(fields: [riderId], references: [riderId])
   shippingCharge     Decimal?
   expectedDelivery   DateTime?
   createdAt          DateTime             @default(now())
@@ -450,7 +452,7 @@ model Order {
 model OrderStatusHistory {
   orderStatusId Int        @id() @default(autoincrement())
   orderId       String
-  order         Order      @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
+  order         Order      @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   satus         OrderStaus
   createdAt     DateTime   @default(now())
   updatedAt     DateTime?  @updatedAt
@@ -458,7 +460,7 @@ model OrderStatusHistory {
 
 model OrderAddress {
   orderId   String
-  order     Order     @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
+  order     Order     @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   addressId Int
   address   Address   @relation(fields: [addressId], references: [addressId])
   createdAt DateTime  @default(now())
@@ -477,7 +479,7 @@ model OrderItem {
   discountName       String?
   discountValue      Decimal?
   discountType       DiscountType?
-  order              Order         @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
+  order              Order         @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   product            Product       @relation(fields: [productId], references: [productId])
   discount           Decimal?
   createdAt          DateTime      @default(now())
@@ -486,10 +488,19 @@ model OrderItem {
   @@id([orderId, productId])
 }
 
+model Rider {
+  riderId   Int       @id() @default(autoincrement())
+  name      String
+  email     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Order     Order[]
+}
+
 model Payment {
   paymentId     Int            @id() @default(autoincrement())
   orderId       String
-  order         Order          @relation(fields: [orderId], references: [orderId],onDelete: Cascade)
+  order         Order          @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   paymentMethod PaymentMethods
   transactionId String?
   amount        Decimal
