@@ -49,9 +49,30 @@ model Product {
   productRelated    RelatedProduct[]        @relation("RelatedProducts")
   togethers         BoughtTogetherProduct[] @relation("ProductTogether")
   togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
+  QCInventory       QCInventory[]           @relation("ProductQCInventory")
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model QCInventory {
+  qcInventoryId Int       @id @default(autoincrement())
+  productId     Int
+  product       Product   @relation("ProductQCInventory", fields: [productId], references: [productId], onDelete: Cascade)
+  status        QCStatus
+  checkedBy     String?
+  checkedAt     DateTime  @default(now())
+  comments      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@index([productId])
+}
+
+enum QCStatus {
+  PASSED
+  FAILED
+  PENDING
 }
 
 model ProductDiscount {
