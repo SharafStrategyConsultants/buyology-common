@@ -56,15 +56,16 @@ model Product {
 }
 
 model QCInventory {
-  qcInventoryId Int       @id @default(autoincrement())
+  qcInventoryId Int         @id @default(autoincrement())
   productId     Int
-  product       Product   @relation("ProductQCInventory", fields: [productId], references: [productId], onDelete: Cascade)
+  product       Product     @relation("ProductQCInventory", fields: [productId], references: [productId], onDelete: Cascade)
   status        QCStatus
   checkedBy     String?
-  checkedAt     DateTime  @default(now())
+  checkedAt     DateTime    @default(now())
   comments      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime?   @updatedAt
+  OrderItem     OrderItem[]
 
   @@index([productId])
 }
@@ -505,6 +506,8 @@ model OrderItem {
   discount           Decimal?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime?     @updatedAt
+  qcInventoryId      Int?
+  qcInventory        QCInventory?   @relation(fields: [qcInventoryId], references: [qcInventoryId])
 
   @@id([orderId, productId])
 }
