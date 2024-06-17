@@ -50,6 +50,7 @@ model Product {
   togethers         BoughtTogetherProduct[] @relation("ProductTogether")
   togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
   QCInventory       QCInventory[]           @relation("ProductQCInventory")
+  rating            Rating[]
 
   @@unique([sku])
   @@index([name, sku])
@@ -299,9 +300,35 @@ model User {
   updatedAt    DateTime?      @updatedAt
   Wishlist     Wishlist?
   phoneNumbers phoneNumbers[]
+  ratings      Rating[]
 
   @@unique([email])
   @@index([firstName, lastName, email])
+}
+
+model Rating {
+  ratingId    Int          @id @default(autoincrement())
+  value       Decimal
+  userId      Int
+  user        User         @relation(fields: [userId], references: [userId])
+  productId   Int
+  product     Product      @relation(fields: [productId], references: [productId])
+  description String?
+  meta        RatingMeta[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
+
+  @@unique([userId, productId])
+}
+
+model RatingMeta {
+  metaId    Int       @id @default(autoincrement())
+  imageUrl  String
+  isDeleted Boolean   @default(false)
+  ratingId  Int?
+  rating    Rating?   @relation(fields: [ratingId], references: [ratingId], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum Gender {
@@ -507,7 +534,7 @@ model OrderItem {
   createdAt          DateTime      @default(now())
   updatedAt          DateTime?     @updatedAt
   qcInventoryId      Int?
-  qcInventory        QCInventory?   @relation(fields: [qcInventoryId], references: [qcInventoryId])
+  qcInventory        QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
 
   @@id([orderId, productId])
 }
