@@ -51,9 +51,22 @@ model Product {
   togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
   QCInventory       QCInventory[]           @relation("ProductQCInventory")
   rating            Rating[]
+  Inventory         Inventory?
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model Inventory {
+  inventoryId    Int       @id @default(autoincrement())
+  productId      Int       @unique
+  quantityOnHand Int       @default(0)
+  reorderLevel   Int       @default(0)
+  maintainLevel  Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  product Product @relation(fields: [productId], references: [productId])
 }
 
 model QCInventory {
