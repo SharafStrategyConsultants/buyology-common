@@ -52,9 +52,44 @@ model Product {
   QCInventory       QCInventory[]           @relation("ProductQCInventory")
   rating            Rating[]
   Inventory         Inventory?
+  ProductSupplier   ProductSupplier[]
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model Supplier {
+  supplierId    Int               @id @default(autoincrement())
+  name          String
+  buyer         String
+  companyTitle  String
+  contactPerson String?
+  email         String
+  phoneNumber   String
+  building      String?
+  landMark      String?
+  area          String?
+  region        String?
+  country       String?
+  paymentMode   PaymentMode
+  products      ProductSupplier[]
+}
+
+enum PaymentMode {
+  CASH
+  CREDIT
+}
+
+model ProductSupplier {
+  productSupplierId Int         @id @default(autoincrement())
+  product           Product     @relation(fields: [productId], references: [productId])
+  supplier          Supplier    @relation(fields: [supplierId], references: [supplierId])
+  productId         Int
+  supplierId        Int
+  paymentMode       PaymentMode
+  amount            Decimal
+
+  @@unique([productId, supplierId, paymentMode])
 }
 
 model Inventory {
