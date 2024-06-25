@@ -71,6 +71,9 @@ model Supplier {
   region        String?
   country       String?
   products      ProductSupplier[]
+
+  @@unique([email])
+  @@index([email])
 }
 
 enum PaymentMode {
@@ -596,8 +599,9 @@ model OrderAddress {
   address   Address   @relation(fields: [addressId], references: [addressId])
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  @@index([orderId, addressId])
+
   @@id([orderId, addressId])
+  @@index([orderId, addressId])
 }
 
 model OrderItem {
@@ -617,8 +621,9 @@ model OrderItem {
   updatedAt          DateTime?     @updatedAt
   qcInventoryId      Int?
   qcInventory        QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
-  @@index([orderId, productId])
+
   @@id([orderId, productId])
+  @@index([orderId, productId])
 }
 
 model Rider {
@@ -628,8 +633,9 @@ model Rider {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Order     Order[]
-  @@index([email])
+
   @@unique([email])
+  @@index([email])
 }
 
 model Payment {
