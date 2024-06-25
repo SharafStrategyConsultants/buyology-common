@@ -61,7 +61,6 @@ model Product {
 model Supplier {
   supplierId    Int               @id @default(autoincrement())
   name          String
-  buyer         String
   companyTitle  String
   contactPerson String?
   email         String
