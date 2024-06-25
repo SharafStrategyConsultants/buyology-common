@@ -92,6 +92,7 @@ model ProductSupplier {
   paymentMode       PaymentMode
   amount            Decimal
   dueDate           Int         @default(0)
+
   @@index([productId])
   @@index([supplierId])
 }
@@ -585,6 +586,7 @@ model Order {
   Payment            Payment[]
   OrderStatusHistory OrderStatusHistory[]
 
+  @@index([status, riderId])
   @@index([status])
   @@index([riderId])
   @@index([userId])
