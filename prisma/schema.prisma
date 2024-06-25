@@ -70,13 +70,14 @@ model Supplier {
   area          String?
   region        String?
   country       String?
-  paymentMode   PaymentMode
   products      ProductSupplier[]
 }
 
 enum PaymentMode {
   CASH
   CREDIT
+  CHEQUE
+  BANK_TRANSFER
 }
 
 model ProductSupplier {
@@ -87,8 +88,7 @@ model ProductSupplier {
   supplierId        Int
   paymentMode       PaymentMode
   amount            Decimal
-
-  @@unique([productId, supplierId, paymentMode])
+  dueDate           Int         @default(0)
 }
 
 model Inventory {
