@@ -133,6 +133,8 @@ model ProductDiscount {
   startTo    DateTime?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
+
+  @@index([productId])
 }
 
 model Shipping {
@@ -142,6 +144,8 @@ model Shipping {
   shippingCharge Decimal?
   productId      Int
   product        Product  @relation(fields: [productId], references: [productId], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model ProductAttributes {
@@ -168,6 +172,8 @@ model ProductMeta {
   product   Product?  @relation(fields: [productId], references: [productId], onDelete: Cascade)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@index([productId])
 }
 
 model ProductVariant {
@@ -177,6 +183,7 @@ model ProductVariant {
   variant   Product @relation("VariantProducts", fields: [variantId], references: [productId], onDelete: Cascade)
 
   @@id([productId, variantId])
+  @@index([variantId, productId])
 }
 
 model RelatedProduct {
@@ -186,6 +193,7 @@ model RelatedProduct {
   relatedProducts  Product @relation("RelatedProducts", fields: [relatedProductId], references: [productId], onDelete: Cascade)
 
   @@id([productId, relatedProductId])
+  @@index([productId, relatedProductId])
 }
 
 model BoughtTogetherProduct {
@@ -195,6 +203,7 @@ model BoughtTogetherProduct {
   togetherProducts  Product @relation("TogetherProducts", fields: [togetherProductId], references: [productId], onDelete: Cascade)
 
   @@id([productId, togetherProductId])
+  @@index([productId, togetherProductId])
 }
 
 model Wishlist {
@@ -236,6 +245,8 @@ model Specification {
   productId         Int
   createdAt         DateTime  @default(now())
   updatedAt         DateTime? @updatedAt
+
+  @@index([productId])
 }
 
 model Category {
@@ -254,6 +265,8 @@ model Category {
   updatedAt     DateTime?      @updatedAt
   attributeId   Int?
   AttributeSet  AttributeSet[]
+
+  @@index([categoryId])
 }
 
 model AttributeSet {
@@ -265,6 +278,8 @@ model AttributeSet {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime?           @updatedAt
   ProductAttributes ProductAttributes[]
+
+  @@index([categoryId])
 }
 
 model AttributeSetItem {
@@ -275,6 +290,8 @@ model AttributeSetItem {
   AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
   createdAt          DateTime     @default(now())
   updatedAt          DateTime?    @updatedAt
+
+  @@index([attributeSetId, attributeId])
 }
 
 model Attributes {
@@ -310,6 +327,8 @@ model CategoryMeta {
   catogory   Category? @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
+
+  @@index([categoryId])
 }
 
 model Address {
@@ -326,6 +345,8 @@ model Address {
   addresses     OrderAddress[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime?      @updatedAt
+
+  @@index([userId])
 }
 
 model User {
@@ -366,6 +387,7 @@ model Rating {
   updatedAt   DateTime?    @updatedAt
 
   @@unique([userId, productId])
+  @@index([userId, productId])
 }
 
 model RatingMeta {
@@ -376,6 +398,8 @@ model RatingMeta {
   rating    Rating?   @relation(fields: [ratingId], references: [ratingId], onDelete: Cascade)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@index([ratingId])
 }
 
 enum Gender {
@@ -410,6 +434,8 @@ model UserLogin {
   user        User      @relation(fields: [userId], references: [userId])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
+
+  @@index([userId])
 }
 
 model Cart {
@@ -419,6 +445,8 @@ model Cart {
   cartItems CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime?  @updatedAt
+
+  @@index([userId])
 }
 
 model CartItem {
@@ -436,6 +464,7 @@ model CartItem {
   updatedAt     DateTime?     @updatedAt
 
   @@id([cartId, productId])
+  @@index([cartId, productId])
 }
 
 model Discount {
@@ -459,6 +488,8 @@ model DiscountMeta {
   discount   Discount? @relation(fields: [discountId], references: [discountId], onDelete: Cascade)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
+
+  @@index([discountId])
 }
 
 enum DiscountType {
@@ -503,6 +534,7 @@ model CouponUser {
   updatedAt DateTime? @updatedAt
 
   @@id([userId, couponId])
+  @@index([userId, couponId])
 }
 
 enum OrderStaus {
@@ -543,7 +575,7 @@ model Order {
   Payment            Payment[]
   OrderStatusHistory OrderStatusHistory[]
 
-  @@index([status])
+  @@index([status, riderId, userId])
 }
 
 model OrderStatusHistory {
@@ -553,6 +585,8 @@ model OrderStatusHistory {
   satus         OrderStaus
   createdAt     DateTime   @default(now())
   updatedAt     DateTime?  @updatedAt
+
+  @@index([orderId, satus])
 }
 
 model OrderAddress {
@@ -562,7 +596,7 @@ model OrderAddress {
   address   Address   @relation(fields: [addressId], references: [addressId])
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-
+  @@index([orderId, addressId])
   @@id([orderId, addressId])
 }
 
@@ -583,7 +617,7 @@ model OrderItem {
   updatedAt          DateTime?     @updatedAt
   qcInventoryId      Int?
   qcInventory        QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
-
+  @@index([orderId, productId])
   @@id([orderId, productId])
 }
 
@@ -594,6 +628,8 @@ model Rider {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   Order     Order[]
+  @@index([email])
+  @@unique([email])
 }
 
 model Payment {
