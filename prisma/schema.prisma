@@ -92,6 +92,8 @@ model ProductSupplier {
   paymentMode       PaymentMode
   amount            Decimal
   dueDate           Int         @default(0)
+  @@index([productId])
+  @@index([supplierId])
 }
 
 model Inventory {
@@ -294,7 +296,8 @@ model AttributeSetItem {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime?    @updatedAt
 
-  @@index([attributeSetId, attributeId])
+  @@index([attributeSetId])
+  @@index([attributeId])
 }
 
 model Attributes {
@@ -319,7 +322,9 @@ model AttributeItem {
   updatedAt         DateTime?           @updatedAt
 
   @@unique([attributeId, value])
-  @@index([attributeName, value])
+  @@index([attributeId, value])
+  @@index([attributeName])
+  @@index([value])
 }
 
 model CategoryMeta {
@@ -374,7 +379,9 @@ model User {
   ratings      Rating[]
 
   @@unique([email])
-  @@index([firstName, lastName, email])
+  @@index([firstName])
+  @@index([lastName])
+  @@index([email])
 }
 
 model Rating {
@@ -578,7 +585,9 @@ model Order {
   Payment            Payment[]
   OrderStatusHistory OrderStatusHistory[]
 
-  @@index([status, riderId, userId])
+  @@index([status])
+  @@index([riderId])
+  @@index([userId])
 }
 
 model OrderStatusHistory {
