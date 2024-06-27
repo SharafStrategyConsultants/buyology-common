@@ -71,34 +71,11 @@ model Supplier {
   region          String?
   country         String?
   products        ProductSupplier[]
-  PurchaseOrder   PurchaseOrder[]
+  purchaseOrders  PurchaseOrder[]
   deliveryAddress Json?
 
   @@unique([email])
   @@index([email])
-}
-
-enum PaymentMode {
-  CASH
-  CREDIT
-  CHEQUE
-  BANK_TRANSFER
-}
-
-model ProductSupplier {
-  productSupplierId Int                    @id @default(autoincrement())
-  product           Product                @relation(fields: [productId], references: [productId])
-  supplier          Supplier               @relation(fields: [supplierId], references: [supplierId])
-  productId         Int
-  supplierId        Int
-  paymentMode       PaymentMode
-  amount            Decimal
-  cost              Decimal
-  purchaseOrders    ProductPurchaseOrder[]
-
-  @@unique([productId, supplierId, paymentMode])
-  @@index([productId])
-  @@index([supplierId])
 }
 
 model PurchaseOrder {
@@ -107,7 +84,24 @@ model PurchaseOrder {
   supplier        Supplier               @relation(fields: [supplierId], references: [supplierId])
   supplierId      Int
   productOrders   ProductPurchaseOrder[]
+  transactions    Transaction[]
+  totalAmount     Decimal                @default(0)
+  balance         Decimal                @default(0)
 
+  @@index([supplierId])
+}
+
+model ProductSupplier {
+  productSupplierId Int                    @id @default(autoincrement())
+  product           Product                @relation(fields: [productId], references: [productId])
+  supplier          Supplier               @relation(fields: [supplierId], references: [supplierId])
+  productId         Int
+  supplierId        Int
+  cost              Decimal
+  purchaseOrders    ProductPurchaseOrder[]
+
+  @@unique([productId, supplierId])
+  @@index([productId])
   @@index([supplierId])
 }
 
@@ -122,6 +116,22 @@ model ProductPurchaseOrder {
 
   @@index([purchaseOrderId])
   @@index([productSupplierId])
+}
+
+model Transaction {
+  transactionId   Int             @id @default(autoincrement())
+  purchaseOrder   PurchaseOrder   @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
+  purchaseOrderId Int
+  amount          Decimal
+  transactionDate DateTime        @default(now())
+  paymentMode     PaymentMode
+}
+
+enum PaymentMode {
+  CASH
+  CREDIT
+  CHEQUE
+  BANK_TRANSFER
 }
 
 model Inventory {
