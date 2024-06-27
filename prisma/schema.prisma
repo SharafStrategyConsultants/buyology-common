@@ -59,18 +59,20 @@ model Product {
 }
 
 model Supplier {
-  supplierId    Int               @id @default(autoincrement())
-  name          String
-  companyTitle  String
-  contactPerson String?
-  email         String
-  phoneNumber   String
-  building      String?
-  landMark      String?
-  area          String?
-  region        String?
-  country       String?
-  products      ProductSupplier[]
+  supplierId      Int               @id @default(autoincrement())
+  name            String
+  companyTitle    String
+  contactPerson   String?
+  email           String
+  phoneNumber     String
+  building        String?
+  landMark        String?
+  area            String?
+  region          String?
+  country         String?
+  products        ProductSupplier[]
+  PurchaseOrder   PurchaseOrder[]
+  deliveryAddress Json?
 
   @@unique([email])
   @@index([email])
@@ -84,17 +86,42 @@ enum PaymentMode {
 }
 
 model ProductSupplier {
-  productSupplierId Int         @id @default(autoincrement())
-  product           Product     @relation(fields: [productId], references: [productId])
-  supplier          Supplier    @relation(fields: [supplierId], references: [supplierId])
+  productSupplierId Int                    @id @default(autoincrement())
+  product           Product                @relation(fields: [productId], references: [productId])
+  supplier          Supplier               @relation(fields: [supplierId], references: [supplierId])
   productId         Int
   supplierId        Int
   paymentMode       PaymentMode
   amount            Decimal
-  dueDate           Int         @default(0)
+  cost              Decimal
+  purchaseOrders    ProductPurchaseOrder[]
 
+  @@unique([productId, supplierId, paymentMode])
   @@index([productId])
   @@index([supplierId])
+}
+
+model PurchaseOrder {
+  purchaseOrderId Int                    @id @default(autoincrement())
+  orderDate       DateTime               @default(now())
+  supplier        Supplier               @relation(fields: [supplierId], references: [supplierId])
+  supplierId      Int
+  productOrders   ProductPurchaseOrder[]
+
+  @@index([supplierId])
+}
+
+model ProductPurchaseOrder {
+  productPurchaseOrderId Int             @id @default(autoincrement())
+  purchaseOrder          PurchaseOrder   @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
+  purchaseOrderId        Int
+  productSupplier        ProductSupplier @relation(fields: [productSupplierId], references: [productSupplierId])
+  productSupplierId      Int
+  quantity               Int
+  cost                   Decimal
+
+  @@index([purchaseOrderId])
+  @@index([productSupplierId])
 }
 
 model Inventory {
