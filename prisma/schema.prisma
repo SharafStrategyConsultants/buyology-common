@@ -80,7 +80,8 @@ model Supplier {
 
 model PurchaseOrder {
   purchaseOrderId Int                    @id @default(autoincrement())
-  orderDate       DateTime               @default(now())
+  buyer           String
+  orderDate       DateTime
   deliveryDate    DateTime
   supplier        Supplier               @relation(fields: [supplierId], references: [supplierId])
   supplierId      Int
@@ -88,6 +89,7 @@ model PurchaseOrder {
   transactions    Transaction[]
   totalAmount     Decimal                @default(0)
   balance         Decimal                @default(0)
+  shippingCharge  Decimal                @default(0)
 
   @@index([supplierId])
 }
