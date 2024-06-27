@@ -81,6 +81,7 @@ model Supplier {
 model PurchaseOrder {
   purchaseOrderId Int                    @id @default(autoincrement())
   orderDate       DateTime               @default(now())
+  deliveryDate    DateTime
   supplier        Supplier               @relation(fields: [supplierId], references: [supplierId])
   supplierId      Int
   productOrders   ProductPurchaseOrder[]
@@ -119,12 +120,13 @@ model ProductPurchaseOrder {
 }
 
 model Transaction {
-  transactionId   Int             @id @default(autoincrement())
-  purchaseOrder   PurchaseOrder   @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
+  transactionId   Int           @id @default(autoincrement())
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
   purchaseOrderId Int
   amount          Decimal
-  transactionDate DateTime        @default(now())
+  transactionDate DateTime      @default(now())
   paymentMode     PaymentMode
+  creditDays      Int           @default(0)
 }
 
 enum PaymentMode {
