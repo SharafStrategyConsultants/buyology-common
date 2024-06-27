@@ -90,8 +90,14 @@ model PurchaseOrder {
   totalAmount        Decimal                @default(0)
   balance            Decimal                @default(0)
   shippingCharge     Decimal                @default(0)
+  status             purchaseOrderStatus    @default(PURCHASE_ORDER)
 
   @@index([supplierId])
+}
+
+enum purchaseOrderStatus {
+  PURCHASE_ORDER
+  PURCHASE_RECIVED
 }
 
 model ProductSupplier {
