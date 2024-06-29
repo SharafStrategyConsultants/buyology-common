@@ -123,6 +123,7 @@ model ProductPurchaseOrder {
   productSupplierId      Int
   quantity               Int
   cost                   Decimal
+  total                  Decimal         @default(0)
 
   @@index([purchaseOrderId])
   @@index([productSupplierId])
