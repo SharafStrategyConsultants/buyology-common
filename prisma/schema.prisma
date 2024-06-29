@@ -79,18 +79,19 @@ model Supplier {
 }
 
 model PurchaseOrder {
-  purchaseOrderId    Int                    @id @default(autoincrement())
-  buyer              String
-  orderDate          DateTime
-  deliveryDate       DateTime
-  supplier           Supplier               @relation(fields: [supplierId], references: [supplierId])
-  supplierId         Int
-  productOrdersItems ProductPurchaseOrder[]
-  transactions       Transaction[]
-  totalAmount        Decimal                @default(0)
-  balance            Decimal                @default(0)
-  shippingCharge     Decimal                @default(0)
-  status             purchaseOrderStatus    @default(PURCHASE_ORDER)
+  purchaseOrderId           Int                    @id @default(autoincrement())
+  buyer                     String
+  orderDate                 DateTime
+  deliveryDate              DateTime
+  supplier                  Supplier               @relation(fields: [supplierId], references: [supplierId])
+  supplierId                Int
+  productOrdersItems        ProductPurchaseOrder[]
+  transactions              Transaction[]
+  totalAmount               Decimal                @default(0)
+  totalAmountWithAllcahrges Decimal                @default(0)
+  balance                   Decimal                @default(0)
+  shippingCharge            Decimal                @default(0)
+  status                    purchaseOrderStatus    @default(PURCHASE_ORDER)
 
   @@index([supplierId])
 }
