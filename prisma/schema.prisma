@@ -98,7 +98,8 @@ model PurchaseOrder {
 
 enum purchaseOrderStatus {
   PURCHASE_ORDER
-  PURCHASE_RECIVED
+  PURCHASE_RECIEVED
+  BILL_CREDIT
 }
 
 model ProductSupplier {
