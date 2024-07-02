@@ -126,7 +126,6 @@ model ProductPurchaseOrder {
   quantity               Int
   cost                   Decimal
   total                  Decimal             @default(0)
-  supplierInventory      SupplierInventory[]
 
   @@index([purchaseOrderId])
   @@index([productSupplierId])
@@ -172,13 +171,9 @@ model SupplierInventory {
   maintainLevel          Int                  @default(0)
   cost                   Decimal              @default(0)
   total                  Decimal              @default(0)
-  productPurchaseOrderId Int
-  purchasedProduct       ProductPurchaseOrder @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
-
   @@unique([supplierId, inventoryId])
   @@index([supplierId])
   @@index([inventoryId])
-  @@index([productPurchaseOrderId])
 }
 
 model QCInventory {
