@@ -59,20 +59,21 @@ model Product {
 }
 
 model Supplier {
-  supplierId      Int               @id @default(autoincrement())
-  name            String
-  companyTitle    String
-  contactPerson   String?
-  email           String
-  phoneNumber     String
-  building        String?
-  landMark        String?
-  area            String?
-  region          String?
-  country         String?
-  products        ProductSupplier[]
-  purchaseOrders  PurchaseOrder[]
-  deliveryAddress Json?
+  supplierId        Int                 @id @default(autoincrement())
+  name              String
+  companyTitle      String
+  contactPerson     String?
+  email             String
+  phoneNumber       String
+  building          String?
+  landMark          String?
+  area              String?
+  region            String?
+  country           String?
+  products          ProductSupplier[]
+  purchaseOrders    PurchaseOrder[]
+  supplierInventory SupplierInventory[]
+  deliveryAddress   Json?
 
   @@unique([email])
   @@index([email])
@@ -148,15 +149,32 @@ enum PaymentMode {
 }
 
 model Inventory {
-  inventoryId    Int       @id @default(autoincrement())
-  productId      Int       @unique
-  quantityOnHand Int       @default(0)
-  reorderLevel   Int       @default(0)
-  maintainLevel  Int       @default(0)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @updatedAt
+  inventoryId       Int                 @id @default(autoincrement())
+  productId         Int                 @unique
+  quantityOnHand    Int                 @default(0)
+  reorderLevel      Int                 @default(0)
+  maintainLevel     Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
+  supplierInventory SupplierInventory[]
 
   product Product @relation(fields: [productId], references: [productId])
+}
+
+model SupplierInventory {
+  supplierInventoryId Int       @id @default(autoincrement())
+  supplier            Supplier  @relation(fields: [supplierId], references: [supplierId])
+  supplierId          Int
+  inventory           Inventory @relation(fields: [inventoryId], references: [inventoryId])
+  inventoryId         Int
+  quantityOnHand      Int       @default(0)
+  reorderLevel        Int       @default(0)
+  maintainLevel       Int       @default(0)
+  cost                Decimal   @default(0)
+  total               Decimal   @default(0)
+
+  @@index([supplierId])
+  @@index([inventoryId])
 }
 
 model QCInventory {
