@@ -163,7 +163,6 @@ model Inventory {
 }
 
 model SupplierInventory {
-  supplierInventoryId    Int                  @id @default(autoincrement())
   supplier               Supplier             @relation(fields: [supplierId], references: [supplierId])
   supplierId             Int
   inventory              Inventory            @relation(fields: [inventoryId], references: [inventoryId])
@@ -176,6 +175,7 @@ model SupplierInventory {
   productPurchaseOrderId Int
   purchasedProduct       ProductPurchaseOrder @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
 
+  @@unique([supplierId, inventoryId])
   @@index([supplierId])
   @@index([inventoryId])
   @@index([productPurchaseOrderId])
