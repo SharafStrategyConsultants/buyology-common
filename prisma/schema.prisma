@@ -53,7 +53,6 @@ model Product {
   rating            Rating[]
   Inventory         Inventory?
   ProductSupplier   ProductSupplier[]
-  isCertified       Boolean                 @default(true)
 
   @@unique([sku])
   @@index([name, sku])
