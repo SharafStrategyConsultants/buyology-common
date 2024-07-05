@@ -22,51 +22,60 @@ model Counter {
 }
 
 model Product {
-  productId         Int                     @id @default(autoincrement())
-  name              String
-  categoryId        Int?
-  description       String?
-  tag               String?
-  modelNumber       String?
-  sku               String
-  warranty          Decimal?
-  isDeleted         Boolean                 @default(false)
-  meta              ProductMeta[]
-  category          Category?               @relation(fields: [categoryId], references: [categoryId])
-  isPublished       Boolean                 @default(false)
-  productType       ProductType             @default(REFURBISHED)
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime?               @updatedAt
-  cartItems         CartItem[]
-  OrderItem         OrderItem[]
-  specifications    Specification[]
-  Advertisement     Advertisement?          @relation(fields: [advertisementId], references: [advertisementId])
-  advertisementId   Int?
-  seo               Json?
-  wishlistItem      WishlistItem[]
-  cost              Decimal                 @default(0)
-  salePrice         Decimal                 @default(0)
-  strikingPrice     Decimal                 @default(0)
-  quantity          Int?
-  discountId        Int?
-  discount          Discount?               @relation(fields: [discountId], references: [discountId])
-  ProductAttributes ProductAttributes[]
-  ProductDiscount   ProductDiscount[]
-  Shipping          Shipping[]
-  variants          ProductVariant[]        @relation("ProductVariants")
-  variantProducts   ProductVariant[]        @relation("VariantProducts")
-  relates           RelatedProduct[]        @relation("ProductRelated")
-  productRelated    RelatedProduct[]        @relation("RelatedProducts")
-  togethers         BoughtTogetherProduct[] @relation("ProductTogether")
-  togetherProduct   BoughtTogetherProduct[] @relation("TogetherProducts")
-  QCInventory       QCInventory[]           @relation("ProductQCInventory")
-  rating            Rating[]
-  Inventory         Inventory?
-  ProductSupplier   ProductSupplier[]
-  brandName         String?
+  productId           Int                     @id @default(autoincrement())
+  name                String
+  categoryId          Int?
+  description         String?
+  tag                 String?
+  modelNumber         String?
+  sku                 String
+  warranty            Decimal?
+  isDeleted           Boolean                 @default(false)
+  meta                ProductMeta[]
+  category            Category?               @relation(fields: [categoryId], references: [categoryId])
+  isPublished         Boolean                 @default(false)
+  productType         ProductType             @default(REFURBISHED)
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime?               @updatedAt
+  cartItems           CartItem[]
+  OrderItem           OrderItem[]
+  specifications      Specification[]
+  Advertisement       Advertisement?          @relation(fields: [advertisementId], references: [advertisementId])
+  advertisementId     Int?
+  seo                 Json?
+  wishlistItem        WishlistItem[]
+  cost                Decimal                 @default(0)
+  salePrice           Decimal                 @default(0)
+  strikingPrice       Decimal                 @default(0)
+  quantity            Int?
+  discountId          Int?
+  discount            Discount?               @relation(fields: [discountId], references: [discountId])
+  ProductAttributes   ProductAttributes[]
+  ProductDiscount     ProductDiscount[]
+  Shipping            Shipping[]
+  variants            ProductVariant[]        @relation("ProductVariants")
+  variantProducts     ProductVariant[]        @relation("VariantProducts")
+  relates             RelatedProduct[]        @relation("ProductRelated")
+  productRelated      RelatedProduct[]        @relation("RelatedProducts")
+  togethers           BoughtTogetherProduct[] @relation("ProductTogether")
+  togetherProduct     BoughtTogetherProduct[] @relation("TogetherProducts")
+  QCInventory         QCInventory[]           @relation("ProductQCInventory")
+  rating              Rating[]
+  Inventory           Inventory?
+  ProductSupplier     ProductSupplier[]
+  brandName           String?
+  mostPopularProducts MostPopular?
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model MostPopular {
+  mostPopularId Int       @id @default(autoincrement())
+  productId     Int       @unique
+  product       Product   @relation(fields: [productId], references: [productId])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
 }
 
 model Supplier {
