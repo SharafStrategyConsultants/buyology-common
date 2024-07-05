@@ -11,6 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Counter {
+  counterId Int       @id @default(autoincrement())
+  type      String    @unique
+  value     Int       @default(100)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([type])
+}
+
 model Product {
   productId         Int                     @id @default(autoincrement())
   name              String
