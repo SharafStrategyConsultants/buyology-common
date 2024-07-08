@@ -97,6 +97,7 @@ model Supplier {
   deliveryAddress   Json?
   createdAt         DateTime            @default(now())
   updatedAt         DateTime?           @updatedAt
+  orderItemsByUsers OrderItem[]
 
   @@unique([email])
   @@index([email])
@@ -731,6 +732,8 @@ model OrderItem {
   updatedAt          DateTime?     @updatedAt
   qcInventoryId      Int?
   qcInventory        QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
+  supplierId         Int
+  pointToSupplier    Supplier      @relation(fields: [supplierId], references: [supplierId])
 
   @@id([orderId, productId])
   @@index([orderId, productId])
