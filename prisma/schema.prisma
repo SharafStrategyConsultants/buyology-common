@@ -734,8 +734,8 @@ model OrderItem {
   qcInventory             QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
   supplierId              Int
   pointToSupplier         Supplier      @relation(fields: [supplierId], references: [supplierId])
-  supplierCumulativeStock Int
-  
+  supplierCumulativeStock Int           @default(0)
+
   @@id([orderId, productId])
   @@index([orderId, productId])
 }
