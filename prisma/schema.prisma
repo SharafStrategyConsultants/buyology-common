@@ -65,9 +65,16 @@ model Product {
   ProductSupplier     ProductSupplier[]
   brandName           String?
   mostPopularProducts MostPopular?
+  averageRating       AverageRating?
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model AverageRating {
+  productId Int     @unique
+  product   Product @relation(fields: [productId], references: [productId])
+  value     Decimal @default(0)
 }
 
 model MostPopular {
