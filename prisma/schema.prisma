@@ -223,17 +223,18 @@ model SupplierInventory {
 }
 
 model QCInventory {
-  qcInventoryId Int         @id @default(autoincrement())
-  productId     Int
-  product       Product     @relation("ProductQCInventory", fields: [productId], references: [productId], onDelete: Cascade)
-  status        QCStatus
-  checkedBy     String?
-  checkedAt     DateTime    @default(now())
-  comments      String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime?   @updatedAt
-  OrderItem     OrderItem[]
-  scraps        Scrap[]
+  qcInventoryId  Int              @id @default(autoincrement())
+  productId      Int
+  product        Product          @relation("ProductQCInventory", fields: [productId], references: [productId], onDelete: Cascade)
+  status         QCStatus
+  checkedBy      String?
+  checkedAt      DateTime         @default(now())
+  comments       String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime?        @updatedAt
+  OrderItem      OrderItem[]
+  scraps         Scrap[]
+  supplierReturn SupplierReturn[]
 
   @@index([productId])
 }
@@ -265,6 +266,8 @@ model SupplierReturn {
   product                Product               @relation(fields: [productId], references: [productId])
   supplierInventory      SupplierInventory     @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
   productPurchaseOrderId Int?
+  qcInventoryId          Int?
+  qcInventory            QCInventory?          @relation(fields: [qcInventoryId], references: [qcInventoryId])
   productPurchaseOrder   ProductPurchaseOrder? @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
 
   @@index([supplierId, productId])
