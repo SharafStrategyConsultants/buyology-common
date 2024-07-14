@@ -234,7 +234,7 @@ model QCInventory {
   updatedAt      DateTime?        @updatedAt
   scraps         Scrap[]
   supplierReturn SupplierReturn[]
-  orderItem      OrderItem?
+  orderItem      OrderItem[]
 
   @@index([productId])
 }
@@ -782,7 +782,7 @@ model OrderItem {
   discount                Decimal?
   createdAt               DateTime          @default(now())
   updatedAt               DateTime?         @updatedAt
-  qcInventoryId           Int?              @unique
+  qcInventoryId           Int?
   qcInventory             QCInventory?      @relation(fields: [qcInventoryId], references: [qcInventoryId])
   supplierId              Int
   pointToSupplier         Supplier          @relation(fields: [supplierId], references: [supplierId])
