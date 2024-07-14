@@ -795,7 +795,8 @@ model OrderItem {
 
 enum OrderItemQcStatus {
   NORMAL
-  QC
+  SCRAP
+  SUPPLIER
 }
 
 model Rider {
