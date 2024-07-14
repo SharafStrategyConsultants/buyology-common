@@ -234,7 +234,7 @@ model QCInventory {
   updatedAt      DateTime?        @updatedAt
   scraps         Scrap[]
   supplierReturn SupplierReturn[]
-  orderItem      OrderItem[]
+  orderItem      OrderItem?
 
   @@index([productId])
 }
@@ -700,7 +700,7 @@ model CouponUser {
   @@index([userId, couponId])
 }
 
-enum OrderStaus {
+enum OrderStatus {
   PENDING
   PROCEEDED
   PACKED
@@ -722,7 +722,7 @@ model Order {
   orderId            String               @id()
   userId             Int
   user               User                 @relation(fields: [userId], references: [userId])
-  status             OrderStaus
+  status             OrderStatus
   totalDiscountSum   Decimal              @default(0)
   totalCost          Decimal
   totalSumWithCharge Decimal?
@@ -745,12 +745,12 @@ model Order {
 }
 
 model OrderStatusHistory {
-  orderStatusId Int        @id() @default(autoincrement())
+  orderStatusId Int         @id() @default(autoincrement())
   orderId       String
-  order         Order      @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  satus         OrderStaus
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime?  @updatedAt
+  order         Order       @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  satus         OrderStatus
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime?   @updatedAt
 
   @@index([orderId, satus])
 }
@@ -771,25 +771,31 @@ model OrderItem {
   orderId                 String
   productId               Int
   quantity                Int
-  cumulativeQuantity      Int           @default(0)
+  cumulativeQuantity      Int               @default(0)
   unitPrice               Decimal
   total                   Decimal
   discountName            String?
   discountValue           Decimal?
   discountType            DiscountType?
-  order                   Order         @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  product                 Product       @relation(fields: [productId], references: [productId])
+  order                   Order             @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  product                 Product           @relation(fields: [productId], references: [productId])
   discount                Decimal?
-  createdAt               DateTime      @default(now())
-  updatedAt               DateTime?     @updatedAt
-  qcInventoryId           Int?
-  qcInventory             QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime?         @updatedAt
+  qcInventoryId           Int?              @unique
+  qcInventory             QCInventory?      @relation(fields: [qcInventoryId], references: [qcInventoryId])
   supplierId              Int
-  pointToSupplier         Supplier      @relation(fields: [supplierId], references: [supplierId])
-  supplierCumulativeStock Int           @default(0)
+  pointToSupplier         Supplier          @relation(fields: [supplierId], references: [supplierId])
+  supplierCumulativeStock Int               @default(0)
+  qcStatus                OrderItemQcStatus @default(NORMAL)
 
-  @@id([orderId, productId])
-  @@index([orderId, productId])
+  @@id([orderId, productId, supplierId, qcStatus])
+  @@index([orderId, productId, supplierId, qcStatus])
+}
+
+enum OrderItemQcStatus {
+  NORMAL
+  QC
 }
 
 model Rider {
