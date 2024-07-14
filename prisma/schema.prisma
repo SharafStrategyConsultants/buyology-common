@@ -232,9 +232,9 @@ model QCInventory {
   comments       String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime?        @updatedAt
-  OrderItem      OrderItem[]
   scraps         Scrap[]
   supplierReturn SupplierReturn[]
+  orderItem      OrderItem?
 
   @@index([productId])
 }
@@ -244,6 +244,7 @@ model Scrap {
   qcInventoryId          Int
   reason                 String
   quantity               Int
+  unitPrice              Decimal
   createdAt              DateTime              @default(now())
   updatedAt              DateTime?             @updatedAt
   qcInventory            QCInventory           @relation(fields: [qcInventoryId], references: [qcInventoryId])
@@ -258,6 +259,7 @@ model SupplierReturn {
   supplierId             Int
   productId              Int
   quantity               Int
+  unitPrice              Decimal
   reason                 String
   createdAt              DateTime              @default(now())
   updatedAt              DateTime?             @updatedAt
@@ -274,8 +276,9 @@ model SupplierReturn {
 }
 
 enum QCStatus {
-  PASSED
-  FAILED
+  MOVED_TO_INVENTORY
+  MOVED_TO_SCRAP
+  MOVED_TO_RETURN_SUPPLIER
   PENDING
 }
 
@@ -779,7 +782,7 @@ model OrderItem {
   discount                Decimal?
   createdAt               DateTime      @default(now())
   updatedAt               DateTime?     @updatedAt
-  qcInventoryId           Int?
+  qcInventoryId           Int?          @unique
   qcInventory             QCInventory?  @relation(fields: [qcInventoryId], references: [qcInventoryId])
   supplierId              Int
   pointToSupplier         Supplier      @relation(fields: [supplierId], references: [supplierId])
