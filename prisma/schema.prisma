@@ -787,13 +787,14 @@ model OrderItem {
   supplierId              Int
   pointToSupplier         Supplier          @relation(fields: [supplierId], references: [supplierId])
   supplierCumulativeStock Int               @default(0)
-  qcStatus                OrderItemQcStatus @default(INVENTORY)
+  qcStatus                OrderItemQcStatus @default(NORMAL)
 
   @@id([orderId, productId, supplierId, qcStatus])
   @@index([orderId, productId, supplierId, qcStatus])
 }
 
 enum OrderItemQcStatus {
+  NORMAL
   INVENTORY
   SCRAP
   SUPPLIER
