@@ -269,16 +269,16 @@ model SupplierReturn {
   quantity               Int
   unitPrice              Decimal
   reason                 String
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime?            @updatedAt
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime?             @updatedAt
   supplierInventoryId    Int
-  supplier               Supplier             @relation(fields: [supplierId], references: [supplierId])
-  product                Product              @relation(fields: [productId], references: [productId])
-  supplierInventory      SupplierInventory    @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
-  productPurchaseOrderId Int
+  supplier               Supplier              @relation(fields: [supplierId], references: [supplierId])
+  product                Product               @relation(fields: [productId], references: [productId])
+  supplierInventory      SupplierInventory     @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
+  productPurchaseOrderId Int?
   qcInventoryId          Int?
-  qcInventory            QCInventory?         @relation(fields: [qcInventoryId], references: [qcInventoryId])
-  productPurchaseOrder   ProductPurchaseOrder @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
+  qcInventory            QCInventory?          @relation(fields: [qcInventoryId], references: [qcInventoryId])
+  productPurchaseOrder   ProductPurchaseOrder? @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
 
   @@id([supplierId, productId, supplierInventoryId])
   @@index([supplierId, productId, supplierInventoryId])
