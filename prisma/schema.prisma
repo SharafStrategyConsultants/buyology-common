@@ -67,6 +67,7 @@ model Product {
   mostPopularProducts MostPopular?
   averageRating       AverageRating?
   supplierReturns     SupplierReturn[]
+  scraps               Scrap[]
 
   @@unique([sku])
   @@index([name, sku])
@@ -107,6 +108,7 @@ model Supplier {
   updatedAt         DateTime?           @updatedAt
   orderItemsByUsers OrderItem[]
   supplierReturns   SupplierReturn[]
+  scraps             Scrap[]
 
   @@unique([email])
   @@index([email])
@@ -243,6 +245,10 @@ model Scrap {
   scrapId                Int                   @id @default(autoincrement())
   qcInventoryId          Int
   reason                 String
+  supplierId             Int
+  productId              Int
+  supplier               Supplier              @relation(fields: [supplierId], references: [supplierId])
+  product                Product               @relation(fields: [productId], references: [productId])
   quantity               Int
   unitPrice              Decimal
   createdAt              DateTime              @default(now())
