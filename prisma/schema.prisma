@@ -276,9 +276,7 @@ model SupplierReturn {
 }
 
 enum QCStatus {
-  MOVED_TO_INVENTORY
-  MOVED_TO_SCRAP
-  MOVED_TO_RETURN_SUPPLIER
+  QC_COMPLETED
   PENDING
 }
 
