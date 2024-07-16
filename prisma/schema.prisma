@@ -247,6 +247,7 @@ model QCInventory {
 }
 
 model Scrap {
+  scrapId                Int                   @id() @default(autoincrement())
   orderId                String
   order                  Order                 @relation(fields: [orderId], references: [orderId])
   qcInventoryId          Int
@@ -263,8 +264,9 @@ model Scrap {
   productPurchaseOrderId Int?
   productPurchaseOrder   ProductPurchaseOrder? @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
 
-  @@id([orderId, productId, supplierId])
   @@index([orderId, productId, supplierId])
+  @@index([productId])
+  @@index([supplierId])
   @@index([qcInventoryId])
 }
 
