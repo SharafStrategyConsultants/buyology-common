@@ -221,8 +221,10 @@ model SupplierInventory {
   supplierReturns        SupplierReturn[]
   productPurchaseOrderId Int                  @unique
   productPurchase        ProductPurchaseOrder @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
+  orderItem              OrderItem?
 
   @@unique([supplierId, inventoryId, productPurchaseOrderId])
+  @@index([supplierId, inventoryId, productPurchaseOrderId])
   @@index([supplierId])
   @@index([inventoryId])
 }
@@ -799,6 +801,8 @@ model OrderItem {
   pointToSupplier         Supplier          @relation(fields: [supplierId], references: [supplierId])
   supplierCumulativeStock Int               @default(0)
   qcStatus                OrderItemQcStatus @default(NORMAL)
+  supplierInventoryId     Int               @unique
+  supplierInventery       SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
 
   @@id([orderId, productId, supplierId, qcStatus])
   @@index([orderId, productId, supplierId, qcStatus])
