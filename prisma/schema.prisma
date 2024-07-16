@@ -287,8 +287,14 @@ model SupplierReturn {
   qcInventoryId          Int?
   qcInventory            QCInventory?          @relation(fields: [qcInventoryId], references: [qcInventoryId])
   productPurchaseOrder   ProductPurchaseOrder? @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
+  status                 SupplierReturnStatus  @default(PENDING)
 
   @@index([supplierId, productId])
+}
+
+enum SupplierReturnStatus {
+  PENDING
+  DISPERSE
 }
 
 enum QCStatus {
