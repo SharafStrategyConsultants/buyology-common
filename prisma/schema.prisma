@@ -294,6 +294,7 @@ model SupplierReturn {
 
 enum SupplierReturnStatus {
   PENDING
+  TO_DISPERSE
   DISPERSE
 }
 
