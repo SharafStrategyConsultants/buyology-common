@@ -263,11 +263,17 @@ model Scrap {
   qcInventory            QCInventory           @relation(fields: [qcInventoryId], references: [qcInventoryId])
   productPurchaseOrderId Int?
   productPurchaseOrder   ProductPurchaseOrder? @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
+  status                 ScrapStatus           @default(PENDING)
 
   @@index([orderId, productId, supplierId])
   @@index([productId])
   @@index([supplierId])
   @@index([qcInventoryId])
+}
+
+enum ScrapStatus {
+  PENDING
+  DISPERSE
 }
 
 model SupplierReturn {
