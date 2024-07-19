@@ -347,6 +347,7 @@ model ProductAttributes {
   attributeSet       AttributeSet  @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
 
   @@index([attributeId, productId])
+  @@index([attributeId, attributeItemId])
 }
 
 model ProductMeta {
