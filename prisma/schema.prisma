@@ -878,6 +878,8 @@ model Employee {
   name     String
   password String
   role     EmployeeRole @default(USER)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
 }
 
 enum EmployeeRole {
