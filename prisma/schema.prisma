@@ -873,16 +873,50 @@ model Advertisement {
 }
 
 model Employee {
-  id       Int          @id @default(autoincrement())
-  email    String       @unique
-  name     String
-  password String
-  role     EmployeeRole @default(USER)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime? @updatedAt
+  id        Int          @id @default(autoincrement())
+  email     String       @unique
+  name      String
+  password  String
+  role      EmployeeRole @default(USER)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime?    @updatedAt
 }
 
 enum EmployeeRole {
   USER
   ADMIN
+}
+
+model Banner {
+  bannerId   Int          @id @default(autoincrement())
+  alt        String
+  tag        String
+  dimension  String
+  pageType   PageType     @default(OTHER)
+  type       BannerType   @default(NORMAL)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime?    @updatedAt
+  BannerMeta BannerMeta[]
+}
+
+model BannerMeta {
+  metaId    Int       @id @default(autoincrement())
+  bannerId  Int
+  banner    Banner    @relation(fields: [bannerId], references: [bannerId])
+  imageUrl  String
+  order     Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+enum BannerType {
+  GIF
+  SLIDER
+  NORMAL
+}
+
+enum PageType {
+  HOME
+  CATEGORY
+  OTHER
 }
