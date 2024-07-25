@@ -896,7 +896,7 @@ model Banner {
   type       BannerType   @default(NORMAL)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime?    @updatedAt
-  BannerMeta BannerMeta[]
+  bannerMeta BannerMeta[]
 }
 
 model BannerMeta {
