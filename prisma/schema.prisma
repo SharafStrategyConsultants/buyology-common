@@ -798,28 +798,27 @@ model OrderAddress {
 }
 
 model OrderItem {
-  orderId                 String
-  productId               Int
-  quantity                Int
-  cumulativeQuantity      Int               @default(0)
-  unitPrice               Decimal
-  total                   Decimal
-  discountName            String?
-  discountValue           Decimal?
-  discountType            DiscountType?
-  order                   Order             @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  product                 Product           @relation(fields: [productId], references: [productId])
-  discount                Decimal?
-  createdAt               DateTime          @default(now())
-  updatedAt               DateTime?         @updatedAt
-  qcInventoryId           Int?
-  qcInventory             QCInventory?      @relation(fields: [qcInventoryId], references: [qcInventoryId])
-  supplierId              Int
-  pointToSupplier         Supplier          @relation(fields: [supplierId], references: [supplierId])
-  supplierCumulativeStock Int               @default(0)
-  qcStatus                OrderItemQcStatus @default(NORMAL)
-  supplierInventoryId     Int
-  supplierInventery       SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
+  orderId             String
+  productId           Int
+  quantity            Int
+  cumulativeQuantity  Int               @default(0)
+  unitPrice           Decimal
+  total               Decimal
+  discountName        String?
+  discountValue       Decimal?
+  discountType        DiscountType?
+  order               Order             @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  product             Product           @relation(fields: [productId], references: [productId])
+  discount            Decimal?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime?         @updatedAt
+  qcInventoryId       Int?
+  qcInventory         QCInventory?      @relation(fields: [qcInventoryId], references: [qcInventoryId])
+  supplierId          Int
+  pointToSupplier     Supplier          @relation(fields: [supplierId], references: [supplierId])
+  qcStatus            OrderItemQcStatus @default(NORMAL)
+  supplierInventoryId Int
+  supplierInventery   SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
 
   @@id([orderId, productId, supplierId, qcStatus])
   @@index([orderId, productId, supplierId, qcStatus])
