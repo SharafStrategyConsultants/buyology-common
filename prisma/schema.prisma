@@ -170,7 +170,7 @@ model ProductPurchaseOrder {
   scraps                 Scrap[]
   supplierReturns        SupplierReturn[]
   supplierInventoryId    Int
-  suppleirInventory      SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
+  supplierInventory      SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
 
   @@index([purchaseOrderId])
   @@index([productSupplierId])
