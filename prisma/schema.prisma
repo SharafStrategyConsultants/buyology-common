@@ -89,7 +89,7 @@ model MostPopular {
 }
 
 model Supplier {
-  supplierId        Int                 @id @default(autoincrement())
+  supplierId        Int                @id @default(autoincrement())
   name              String
   companyTitle      String
   contactPerson     String?
@@ -102,10 +102,10 @@ model Supplier {
   country           String?
   products          ProductSupplier[]
   purchaseOrders    PurchaseOrder[]
-  supplierInventory SupplierInventory[]
+  supplierInventory SupplierInventory?
   deliveryAddress   Json?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime?           @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime?          @updatedAt
   orderItemsByUsers OrderItem[]
   supplierReturns   SupplierReturn[]
   scraps            Scrap[]
@@ -208,7 +208,7 @@ model Inventory {
 model SupplierInventory {
   supplierInventoryId    Int                  @id @default(autoincrement())
   supplier               Supplier             @relation(fields: [supplierId], references: [supplierId])
-  supplierId             Int
+  supplierId             Int                  @unique
   inventory              Inventory            @relation(fields: [inventoryId], references: [inventoryId])
   inventoryId            Int
   quantityOnHand         Int                  @default(0)
