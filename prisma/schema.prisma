@@ -89,7 +89,7 @@ model MostPopular {
 }
 
 model Supplier {
-  supplierId        Int                @id @default(autoincrement())
+  supplierId        Int                 @id @default(autoincrement())
   name              String
   companyTitle      String
   contactPerson     String?
@@ -102,10 +102,10 @@ model Supplier {
   country           String?
   products          ProductSupplier[]
   purchaseOrders    PurchaseOrder[]
-  supplierInventory SupplierInventory?
+  supplierInventory SupplierInventory[]
   deliveryAddress   Json?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime?          @updatedAt
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?           @updatedAt
   orderItemsByUsers OrderItem[]
   supplierReturns   SupplierReturn[]
   scraps            Scrap[]
@@ -157,19 +157,20 @@ model ProductSupplier {
 }
 
 model ProductPurchaseOrder {
-  productPurchaseOrderId Int                @id @default(autoincrement())
-  purchaseOrder          PurchaseOrder      @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
+  productPurchaseOrderId Int               @id @default(autoincrement())
+  purchaseOrder          PurchaseOrder     @relation(fields: [purchaseOrderId], references: [purchaseOrderId])
   purchaseOrderId        Int
-  productSupplier        ProductSupplier    @relation(fields: [productSupplierId], references: [productSupplierId])
+  productSupplier        ProductSupplier   @relation(fields: [productSupplierId], references: [productSupplierId])
   productSupplierId      Int
   quantity               Int
   cost                   Decimal
-  total                  Decimal            @default(0)
-  createdAt              DateTime           @default(now())
-  updatedAt              DateTime?          @updatedAt
+  total                  Decimal           @default(0)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime?         @updatedAt
   scraps                 Scrap[]
   supplierReturns        SupplierReturn[]
-  supplierInventory      SupplierInventory?
+  supplierInventoryId    Int
+  suppleirInventory      SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
 
   @@index([purchaseOrderId])
   @@index([productSupplierId])
@@ -206,25 +207,24 @@ model Inventory {
 }
 
 model SupplierInventory {
-  supplierInventoryId    Int                  @id @default(autoincrement())
-  supplier               Supplier             @relation(fields: [supplierId], references: [supplierId])
-  supplierId             Int                  @unique
-  inventory              Inventory            @relation(fields: [inventoryId], references: [inventoryId])
-  inventoryId            Int
-  quantityOnHand         Int                  @default(0)
-  reorderLevel           Int                  @default(0)
-  maintainLevel          Int                  @default(0)
-  cost                   Decimal              @default(0)
-  total                  Decimal              @default(0)
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime?            @updatedAt
-  supplierReturns        SupplierReturn[]
-  productPurchaseOrderId Int                  @unique
-  productPurchase        ProductPurchaseOrder @relation(fields: [productPurchaseOrderId], references: [productPurchaseOrderId])
-  orderItem              OrderItem[]
+  supplierInventoryId  Int                    @id @default(autoincrement())
+  supplier             Supplier               @relation(fields: [supplierId], references: [supplierId])
+  supplierId           Int
+  inventory            Inventory              @relation(fields: [inventoryId], references: [inventoryId])
+  inventoryId          Int
+  quantityOnHand       Int                    @default(0)
+  reorderLevel         Int                    @default(0)
+  maintainLevel        Int                    @default(0)
+  cost                 Decimal                @default(0)
+  total                Decimal                @default(0)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime?              @updatedAt
+  supplierReturns      SupplierReturn[]
+  orderItem            OrderItem[]
+  productPurchaseOrder ProductPurchaseOrder[]
 
-  @@unique([supplierId, inventoryId, productPurchaseOrderId])
-  @@index([supplierId, inventoryId, productPurchaseOrderId])
+  @@unique([supplierId, inventoryId])
+  @@index([supplierId, inventoryId])
   @@index([supplierId])
   @@index([inventoryId])
 }
