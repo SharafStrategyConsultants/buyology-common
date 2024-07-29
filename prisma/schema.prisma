@@ -163,6 +163,7 @@ model ProductPurchaseOrder {
   productSupplier        ProductSupplier   @relation(fields: [productSupplierId], references: [productSupplierId])
   productSupplierId      Int
   quantity               Int
+  qauntityRemains        Int
   cost                   Decimal
   total                  Decimal           @default(0)
   createdAt              DateTime          @default(now())
