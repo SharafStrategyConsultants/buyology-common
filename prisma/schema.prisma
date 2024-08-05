@@ -109,9 +109,15 @@ model Supplier {
   orderItemsByUsers OrderItem[]
   supplierReturns   SupplierReturn[]
   scraps            Scrap[]
+  type              SupplierType        @default(NORMAL)
 
   @@unique([email])
   @@index([email])
+}
+
+enum SupplierType {
+  DEFAULT
+  NORMAL
 }
 
 model PurchaseOrder {
