@@ -38,9 +38,9 @@ model Product {
   createdAt           DateTime                @default(now())
   updatedAt           DateTime?               @updatedAt
   cartItems           CartItem[]
-  OrderItem           OrderItem[]
+  orderItems          OrderItem[]
   specifications      Specification[]
-  Advertisement       Advertisement?          @relation(fields: [advertisementId], references: [advertisementId])
+  advertisement       Advertisement?          @relation(fields: [advertisementId], references: [advertisementId])
   advertisementId     Int?
   seo                 Json?
   wishlistItem        WishlistItem[]
@@ -50,19 +50,19 @@ model Product {
   quantity            Int?
   discountId          Int?
   discount            Discount?               @relation(fields: [discountId], references: [discountId])
-  ProductAttributes   ProductAttributes[]
-  ProductDiscount     ProductDiscount[]
-  Shipping            Shipping[]
+  productAttributes   ProductAttributes[]
+  productDiscounts    ProductDiscount[]
+  shippings           Shipping[]
   variants            ProductVariant[]        @relation("ProductVariants")
   variantProducts     ProductVariant[]        @relation("VariantProducts")
   relates             RelatedProduct[]        @relation("ProductRelated")
   productRelated      RelatedProduct[]        @relation("RelatedProducts")
   togethers           BoughtTogetherProduct[] @relation("ProductTogether")
   togetherProduct     BoughtTogetherProduct[] @relation("TogetherProducts")
-  QCInventory         QCInventory[]           @relation("ProductQCInventory")
-  rating              Rating[]
-  Inventory           Inventory?
-  ProductSupplier     ProductSupplier[]
+  qCInventories       QCInventory[]           @relation("ProductQCInventory")
+  ratings             Rating[]
+  inventory           Inventory?
+  productSuppliers    ProductSupplier[]
   brandName           String?
   mostPopularProducts MostPopular?
   averageRating       AverageRating?
@@ -227,7 +227,7 @@ model SupplierInventory {
   createdAt            DateTime               @default(now())
   updatedAt            DateTime?              @updatedAt
   supplierReturns      SupplierReturn[]
-  orderItem            OrderItem[]
+  orderItems           OrderItem[]
   productPurchaseOrder ProductPurchaseOrder[]
 
   @@unique([supplierId, inventoryId])
@@ -248,7 +248,7 @@ model QCInventory {
   updatedAt      DateTime?        @updatedAt
   scraps         Scrap[]
   supplierReturn SupplierReturn[]
-  orderItem      OrderItem[]
+  orderItems     OrderItem[]
 
   @@index([productId])
 }
@@ -458,7 +458,7 @@ model Category {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime?      @updatedAt
   attributeId   Int?
-  AttributeSet  AttributeSet[]
+  attributeSets AttributeSet[]
 
   @@index([categoryId])
 }
@@ -471,7 +471,7 @@ model AttributeSet {
   items             AttributeSetItem[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime?           @updatedAt
-  ProductAttributes ProductAttributes[]
+  productAttributes ProductAttributes[]
 
   @@index([categoryId])
 }
@@ -480,8 +480,8 @@ model AttributeSetItem {
   attributeSetItemId Int          @id @default(autoincrement())
   attributeSetId     Int
   attributeId        Int
-  Attributes         Attributes   @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
-  AttributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
+  attribute          Attributes   @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
+  attributeSet       AttributeSet @relation(fields: [attributeSetId], references: [attributeSetId], onDelete: Cascade)
   createdAt          DateTime     @default(now())
   updatedAt          DateTime?    @updatedAt
 
@@ -494,8 +494,8 @@ model Attributes {
   type              String
   attributeName     String
   items             AttributeItem[]
-  ProductAttributes ProductAttributes[]
-  AttributeSetItem  AttributeSetItem[]
+  productAttributes ProductAttributes[]
+  attributeSetItem  AttributeSetItem[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime?           @updatedAt
 }
@@ -504,9 +504,9 @@ model AttributeItem {
   attributeItemId   Int                 @id @default(autoincrement())
   attributeName     String
   value             String
-  Attributes        Attributes          @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
+  attribute         Attributes          @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   attributeId       Int
-  ProductAttributes ProductAttributes[]
+  productAttributes ProductAttributes[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime?           @updatedAt
 
@@ -563,7 +563,7 @@ model User {
   token        String         @unique
   createdAt    DateTime       @default(now())
   updatedAt    DateTime?      @updatedAt
-  Wishlist     Wishlist?
+  wishlist     Wishlist?
   phoneNumbers phoneNumbers[]
   ratings      Rating[]
 
@@ -676,7 +676,7 @@ model Discount {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime?      @updatedAt
   meta               DiscountMeta[]
-  Product            Product[]
+  product            Product[]
 }
 
 model DiscountMeta {
@@ -755,25 +755,25 @@ enum PaymentMethods {
 }
 
 model Order {
-  orderId            String               @id()
-  userId             Int
-  user               User                 @relation(fields: [userId], references: [userId])
-  status             OrderStatus
-  totalDiscountSum   Decimal              @default(0)
-  totalCost          Decimal
-  totalSumWithCharge Decimal?
-  totalItem          Int                  @default(0)
-  OrderItem          OrderItem[]
-  addresses          OrderAddress[]
-  riderId            Int?
-  rider              Rider?               @relation(fields: [riderId], references: [riderId])
-  shippingCharge     Decimal?
-  expectedDelivery   DateTime?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime?            @updatedAt
-  Payment            Payment[]
-  OrderStatusHistory OrderStatusHistory[]
-  scraps             Scrap[]
+  orderId              String               @id()
+  userId               Int
+  user                 User                 @relation(fields: [userId], references: [userId])
+  status               OrderStatus
+  totalDiscountSum     Decimal              @default(0)
+  totalCost            Decimal
+  totalSumWithCharge   Decimal?
+  totalItem            Int                  @default(0)
+  orderItems           OrderItem[]
+  addresses            OrderAddress[]
+  riderId              Int?
+  rider                Rider?               @relation(fields: [riderId], references: [riderId])
+  shippingCharge       Decimal?
+  expectedDelivery     DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime?            @updatedAt
+  payments             Payment[]
+  orderStatusHistories OrderStatusHistory[]
+  scraps               Scrap[]
 
   @@index([status, riderId])
   @@index([status])
@@ -785,11 +785,11 @@ model OrderStatusHistory {
   orderStatusId Int         @id() @default(autoincrement())
   orderId       String
   order         Order       @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
-  satus         OrderStatus
+  status        OrderStatus
   createdAt     DateTime    @default(now())
   updatedAt     DateTime?   @updatedAt
 
-  @@index([orderId, satus])
+  @@index([orderId, status])
 }
 
 model OrderAddress {
@@ -825,7 +825,7 @@ model OrderItem {
   pointToSupplier     Supplier          @relation(fields: [supplierId], references: [supplierId])
   qcStatus            OrderItemQcStatus @default(NORMAL)
   supplierInventoryId Int
-  supplierInventery   SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
+  supplierInventory   SupplierInventory @relation(fields: [supplierInventoryId], references: [supplierInventoryId])
 
   @@id([orderId, productId, supplierId, qcStatus])
   @@index([orderId, productId, supplierId, qcStatus])
@@ -844,7 +844,7 @@ model Rider {
   email     String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
-  Order     Order[]
+  orders    Order[]
 
   @@unique([email])
   @@index([email])
