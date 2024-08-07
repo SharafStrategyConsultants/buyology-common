@@ -530,7 +530,7 @@ model CategoryMeta {
 
 model Address {
   addressId     Int            @id @default(autoincrement())
-  Building      String
+  building      String
   landMark      String?
   area          String?
   region        String
