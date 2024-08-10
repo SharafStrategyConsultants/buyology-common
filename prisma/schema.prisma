@@ -466,7 +466,7 @@ model Category {
 model AttributeSet {
   attributeSetId    Int                 @id @default(autoincrement())
   attributeSetName  String
-  Category          Category?           @relation(fields: [categoryId], references: [categoryId])
+  category          Category?           @relation(fields: [categoryId], references: [categoryId])
   categoryId        Int
   items             AttributeSetItem[]
   createdAt         DateTime            @default(now())
