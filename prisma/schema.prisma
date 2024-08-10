@@ -502,7 +502,6 @@ model Attributes {
 
 model AttributeItem {
   attributeItemId   Int                 @id @default(autoincrement())
-  attributeName     String
   value             String
   attribute         Attributes          @relation(fields: [attributeId], references: [attributeId], onDelete: Cascade)
   attributeId       Int
@@ -512,7 +511,6 @@ model AttributeItem {
 
   @@unique([attributeId, value])
   @@index([attributeId, value])
-  @@index([attributeName])
   @@index([value])
 }
 
