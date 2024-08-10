@@ -528,7 +528,8 @@ model CategoryMeta {
 
 model Address {
   addressId     Int            @id @default(autoincrement())
-  Building      String
+  building      String
+  addressTitle  String?
   landMark      String?
   area          String?
   region        String
@@ -784,6 +785,7 @@ model OrderStatusHistory {
   orderId       String
   order         Order       @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   status        OrderStatus
+  passed        Boolean     @default(false)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime?   @updatedAt
 
