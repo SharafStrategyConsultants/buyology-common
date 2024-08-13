@@ -695,23 +695,23 @@ enum DiscountType {
 }
 
 model Coupon {
-  couponId           Int          @id @default(autoincrement())
-  couponName         String
-  couponCode         String       @unique
-  value              Decimal
-  type               CouponType   @default(AMOUNT)
-  carts              Cart[]
-  couponUsers        CouponUser[]
-  orders             Order[]
-  startAt            DateTime
-  endAt              DateTime
-  numberOfUsers      Int
-  radeemPerUser      Int          @default(1)
-  active             Boolean
-  score              Int
-  meta               CouponMeta[]
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime?    @updatedAt
+  couponId      Int          @id @default(autoincrement())
+  couponName    String
+  couponCode    String       @unique
+  value         Decimal
+  type          CouponType   @default(AMOUNT)
+  carts         Cart[]
+  couponUsers   CouponUser[]
+  orders        Order[]
+  startAt       DateTime
+  endAt         DateTime
+  numberOfUsers Int
+  radeemPerUser Int          @default(1)
+  active        Boolean
+  score         Int
+  meta          CouponMeta[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?    @updatedAt
 }
 
 enum CouponType {
@@ -730,15 +730,16 @@ model CouponMeta {
 }
 
 model CouponUser {
-  couponId  Int
-  coupons   Coupon    @relation(fields: [couponId], references: [couponId])
-  userId    Int
-  user      User      @relation(fields: [userId], references: [userId])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  couponUserId Int       @id @default(autoincrement())
+  couponId     Int
+  coupons      Coupon    @relation(fields: [couponId], references: [couponId])
+  userId       Int
+  user         User      @relation(fields: [userId], references: [userId])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 
-  @@id([userId, couponId])
   @@index([userId, couponId])
+  @@index([userId])
 }
 
 enum OrderStatus {
