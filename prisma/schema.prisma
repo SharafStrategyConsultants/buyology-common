@@ -641,6 +641,8 @@ model Cart {
   userId    Int?
   user      User?      @relation(fields: [userId], references: [userId])
   cartItems CartItem[]
+  couponId  Int?
+  coupon    Coupon?    @relation(fields: [couponId], references: [couponId])
   createdAt DateTime   @default(now())
   updatedAt DateTime?  @updatedAt
 
@@ -656,8 +658,6 @@ model CartItem {
   discountType  DiscountType?
   cart          Cart          @relation(fields: [cartId], references: [cartId])
   product       Product       @relation(fields: [productId], references: [productId])
-  couponId      Int?
-  coupon        Coupon?       @relation(fields: [couponId], references: [couponId])
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
 
@@ -696,21 +696,29 @@ enum DiscountType {
 }
 
 model Coupon {
-  couponId      Int          @id @default(autoincrement())
-  couponName    String
-  couponCode    String       @unique
-  discountId    Int?
-  discount      Discount?    @relation(fields: [discountId], references: [discountId])
-  coupons       CartItem[]
-  couponUsers   CouponUser[]
-  startAt       DateTime
-  endAt         DateTime
-  numberOfUsers Int
-  active        Boolean
-  score         Int
-  meta          CouponMeta[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime?    @updatedAt
+  couponId           Int          @id @default(autoincrement())
+  couponName         String
+  couponCode         String       @unique
+  value              Decimal
+  type               CouponType   @default(AMOUNT)
+  carts              Cart[]
+  couponUsers        CouponUser[]
+  startAt            DateTime
+  endAt              DateTime
+  numberOfUsers      Int
+  radeemPerUser      Int          @default(1)
+  active             Boolean
+  score              Int
+  meta               CouponMeta[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime?    @updatedAt
+  Discount           Discount?    @relation(fields: [discountDiscountId], references: [discountId])
+  discountDiscountId Int?
+}
+
+enum CouponType {
+  AMOUNT
+  PERCENTAGE
 }
 
 model CouponMeta {
