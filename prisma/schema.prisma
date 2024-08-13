@@ -703,6 +703,7 @@ model Coupon {
   type               CouponType   @default(AMOUNT)
   carts              Cart[]
   couponUsers        CouponUser[]
+  orders             Order[]
   startAt            DateTime
   endAt              DateTime
   numberOfUsers      Int
@@ -769,6 +770,9 @@ model Order {
   totalDiscountSum     Decimal              @default(0)
   totalCost            Decimal
   totalSumWithCharge   Decimal?
+  radeemedAmount       Decimal?
+  couponId             Int?
+  coupon               Coupon?              @relation(fields: [couponId], references: [couponId])
   totalItem            Int                  @default(0)
   orderItems           OrderItem[]
   addresses            OrderAddress[]
