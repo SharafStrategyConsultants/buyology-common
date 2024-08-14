@@ -68,9 +68,22 @@ model Product {
   averageRating       AverageRating?
   supplierReturns     SupplierReturn[]
   scraps              Scrap[]
+  productViews        ProductViews[]
 
   @@unique([sku])
   @@index([name, sku])
+}
+
+model ProductViews {
+  productViewId Int       @id @default(autoincrement())
+  productId     Int
+  userId        Int
+  count         Int       @default(0)
+  product       Product   @relation(fields: [productId], references: [productId])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+
+  @@unique([productId, userId])
 }
 
 model AverageRating {
