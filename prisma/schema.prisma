@@ -63,7 +63,8 @@ model Product {
   ratings             Rating[]
   inventory           Inventory?
   productSuppliers    ProductSupplier[]
-  brandName           String?
+  brandId             Int?
+  brand               Brands?                 @relation(fields: [brandId], references: [brandId])
   mostPopularProducts MostPopular?
   averageRating       AverageRating?
   supplierReturns     SupplierReturn[]
@@ -72,6 +73,22 @@ model Product {
 
   @@unique([sku])
   @@index([name, sku])
+  @@index([name])
+  @@index([sku])
+  @@index([brandId])
+  @@index([categoryId])
+  @@index([discountId])
+}
+
+model Brands {
+  brandId   Int       @id @default(autoincrement())
+  type      String    @unique
+  brandName String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  products  Product[]
+
+  @@index([type])
 }
 
 model ProductViews {
