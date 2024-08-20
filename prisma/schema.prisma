@@ -803,7 +803,7 @@ model Order {
   coupon               Coupon?              @relation(fields: [couponId], references: [couponId])
   totalItem            Int                  @default(0)
   orderItems           OrderItem[]
-  addresses            OrderAddress?
+  address              OrderAddress?
   riderId              Int?
   rider                Rider?               @relation(fields: [riderId], references: [riderId])
   shippingCharge       Decimal?
