@@ -812,7 +812,8 @@ model Order {
   totalDiscountSum     Decimal              @default(0)
   totalCost            Decimal
   totalSumWithCharge   Decimal?
-  radeemedAmount       Decimal?
+  totalSumWithDiscount Decimal              @default(0)
+  radeemedAmount       Decimal?             @default(0)
   couponId             Int?
   coupon               Coupon?              @relation(fields: [couponId], references: [couponId])
   totalItem            Int                  @default(0)
