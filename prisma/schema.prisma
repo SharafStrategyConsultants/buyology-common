@@ -841,6 +841,7 @@ model OrderStatusHistory {
   order         Order       @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
   status        OrderStatus @default(PENDING)
   passed        Boolean     @default(false)
+  orderBy       Int         @default(0)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime?   @updatedAt
 
