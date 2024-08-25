@@ -90,6 +90,7 @@ model Deal {
   dealType      DealType
   conditions    String?
   dealsProducts DealMapping[]
+  isActive      Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
 }
