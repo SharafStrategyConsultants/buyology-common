@@ -103,6 +103,7 @@ model DealMapping {
   updatedAt DateTime? @updatedAt
 
   @@id([dealId, productId])
+  @@index([dealId, productId])
 }
 
 enum DealType {
