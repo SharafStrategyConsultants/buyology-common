@@ -70,6 +70,7 @@ model Product {
   supplierReturns     SupplierReturn[]
   scraps              Scrap[]
   productViews        ProductViews[]
+  dealsMap            DealMapping[]
 
   @@unique([sku])
   @@index([name, sku])
@@ -78,6 +79,37 @@ model Product {
   @@index([brandId])
   @@index([categoryId])
   @@index([discountId])
+}
+
+model Deal {
+  dealId        Int           @id @default(autoincrement())
+  name          String
+  description   String?
+  startDate     DateTime
+  endDate       DateTime
+  dealType      DealType
+  conditions    String?
+  dealsProducts DealMapping[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
+}
+
+model DealMapping {
+  dealId    Int
+  deal      Deal      @relation(fields: [dealId], references: [dealId])
+  product   Product   @relation(fields: [productId], references: [productId])
+  productId Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([dealId, productId])
+}
+
+enum DealType {
+  BUY_ONE_GET_ONE_FREE
+  FREE_SHIPPING
+  EXCLUSIVE_ACCESS
+  GIFT_WITH_PURCHASE
 }
 
 model Brands {
