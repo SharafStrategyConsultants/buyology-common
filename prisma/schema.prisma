@@ -96,6 +96,7 @@ model Deal {
 }
 
 model DealMapping {
+  dealMapId Int       @id @default(autoincrement())
   dealId    Int
   deal      Deal      @relation(fields: [dealId], references: [dealId])
   product   Product   @relation(fields: [productId], references: [productId])
@@ -103,7 +104,7 @@ model DealMapping {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  @@id([dealId, productId])
+  @@unique([dealId, productId])
   @@index([dealId, productId])
 }
 
