@@ -1020,3 +1020,25 @@ enum PageType {
   CATEGORY
   OTHER
 }
+
+model Country {
+  countryId Int    @id @default(autoincrement())
+  name      String
+  code      String
+  cities    City[]
+}
+
+model City {
+  cityId    Int      @id @default(autoincrement())
+  name      String
+  countryId Int
+  country   Country  @relation(fields: [countryId], references: [countryId])
+  Region    Region[]
+}
+
+model Region {
+  regionId Int    @id @default(autoincrement())
+  name     String
+  cityId   Int
+  city     City   @relation(fields: [cityId], references: [cityId])
+}
