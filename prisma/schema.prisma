@@ -1028,6 +1028,8 @@ model Country {
   name      String
   code      String
   cities    City[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model City {
@@ -1036,6 +1038,8 @@ model City {
   countryId Int
   country   Country  @relation(fields: [countryId], references: [countryId])
   Region    Region[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Region {
@@ -1043,4 +1047,6 @@ model Region {
   name     String
   cityId   Int
   city     City   @relation(fields: [cityId], references: [cityId])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
