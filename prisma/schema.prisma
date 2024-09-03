@@ -1039,7 +1039,7 @@ model City {
   countryId Int
   country   Country   @relation(fields: [countryId], references: [countryId], onDelete: Cascade)
   isActive  Boolean   @default(false)
-  Region    Region[]
+  region    Region[]
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 }
