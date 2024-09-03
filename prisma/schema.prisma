@@ -116,26 +116,25 @@ enum DealType {
 }
 
 model Brands {
-  brandId   Int         @id @default(autoincrement())
-  type      String      @unique
+  brandId   Int        @id @default(autoincrement())
+  type      String     @unique
   brandName String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime?   @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?  @updatedAt
   products  Product[]
-  meta      BrandMeta[]
+  meta      BrandMeta?
 
   @@index([type])
 }
 
 model BrandMeta {
-  metaId     Int       @id @default(autoincrement())
-  brandId    Int?
-  imageUrl   String
-  isDeleted  Boolean   @default(false)
-  imageOrder Int       @default(0)
-  brand      Brands?   @relation(fields: [brandId], references: [brandId], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
+  metaId    Int       @id @default(autoincrement())
+  brandId   Int?      @unique
+  imageUrl  String
+  isDeleted Boolean   @default(false)
+  brand     Brands?   @relation(fields: [brandId], references: [brandId], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@index([brandId])
 }
