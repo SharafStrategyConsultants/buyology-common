@@ -41,10 +41,10 @@ export const verifyAccessTokenOrNot = (
   next: NextFunction
 ) => {
   try {
-    const sceretKey = process.env.SECRET_KEY ?? "";
+    const secretKey = process.env.SECRET_KEY ?? "";
     const token = req.get("authorization");
     if (token) {
-      const decoded = jwt.verify(token, sceretKey);
+      const decoded = jwt.verify(token, secretKey);
       httpContext.set("user", decoded);
       next();
     } else {
