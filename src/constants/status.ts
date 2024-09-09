@@ -5,6 +5,6 @@ export const status ={
     'NOT_FOUND':404,
     'BAD_REQUEST':400,
     'VALIDATION_ERROR':422,
-    'UNAUTHERISED_DATA':401,
-    'FORBBIDDEN':403
+    'UNAUTHORIZED_DATA':401,
+    'FORBIDDEN':403
 }

@@ -5,13 +5,13 @@ import { logger, responseGenerator } from "./helper";
 import { config } from "dotenv";
 config();
 export const httpContext = httpExpressContext;
-export const verfyAccessToken = (
+export const veryAccessToken = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const sceretKey = process.env.SECRET_KEY ?? "";
+    const secretKey = process.env.SECRET_KEY ?? "";
     const token = req.get("authorization");
     if (!token) {
       return responseGenerator(res, {
@@ -21,7 +21,7 @@ export const verfyAccessToken = (
         data: [],
       });
     }
-    const decoded = jwt.verify(token, sceretKey);
+    const decoded = jwt.verify(token, secretKey);
     httpContext.set("user", decoded);
     next();
   } catch (error) {
@@ -35,7 +35,7 @@ export const verfyAccessToken = (
   }
 };
 
-export const verfyAccessTokenOrNot = (
+export const veryAccessTokenOrNot = (
   req: Request,
   res: Response,
   next: NextFunction

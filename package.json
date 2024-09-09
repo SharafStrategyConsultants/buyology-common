@@ -1,7 +1,7 @@
 {
-  "name": "buyolgy-common",
+  "name": "buyology-common",
   "version": "1.0.0",
-  "description": "common package for e-comerce",
+  "description": "common package for e-commerce",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
