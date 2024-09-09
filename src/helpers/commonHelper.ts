@@ -5,7 +5,7 @@ import { logger, responseGenerator } from "./helper";
 import { config } from "dotenv";
 config();
 export const httpContext = httpExpressContext;
-export const veryAccessToken = (
+export const verifyAccessToken = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -35,7 +35,7 @@ export const veryAccessToken = (
   }
 };
 
-export const veryAccessTokenOrNot = (
+export const verifyAccessTokenOrNot = (
   req: Request,
   res: Response,
   next: NextFunction
